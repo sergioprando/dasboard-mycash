@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  --font-family-base: "Inter", "Segoe UI", sans-serif;
+
+  /* Primitive tokens - colors */
+  --color-neutral-0: #ffffff;
+  --color-neutral-100: #f9fafb;
+  --color-neutral-200: #f3f4f6;
+  --color-neutral-300: #e5e7eb;
+  --color-neutral-400: #d1d5db;
+  --color-neutral-500: #9ca3af;
+  --color-neutral-600: #6b7280;
+  --color-neutral-700: #4b5563;
+  --color-neutral-800: #374151;
+  --color-neutral-900: #1f2937;
+  --color-neutral-1000: #111827;
+  --color-brand-600: #d7fe03;
+  --color-green-600: #15be78;
+  --color-red-600: #e61e32;
+  --color-blue-600: #2a89ef;
+
+  /* Primitive tokens - spacing */
+  --space-0: 0px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+
+  /* Semantic tokens */
+  --color-bg-default: var(--color-neutral-100);
+  --color-bg-surface: var(--color-neutral-0);
+  --color-bg-inverse: var(--color-neutral-1000);
+  --color-text-primary: var(--color-neutral-1000);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-inverse: var(--color-neutral-0);
+  --color-border-default: var(--color-neutral-300);
+  --color-accent-primary: var(--color-brand-600);
+  --color-feedback-success: var(--color-green-600);
+  --color-feedback-danger: var(--color-red-600);
+  --color-feedback-info: var(--color-blue-600);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+}
+
+@theme inline {
+  --color-bg-default: var(--color-bg-default);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-bg-inverse: var(--color-bg-inverse);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-inverse: var(--color-text-inverse);
+  --color-border-default: var(--color-border-default);
+  --color-accent-primary: var(--color-accent-primary);
+  --color-feedback-success: var(--color-feedback-success);
+  --color-feedback-danger: var(--color-feedback-danger);
+  --color-feedback-info: var(--color-feedback-info);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-family-base);
+    background-color: var(--color-bg-default);
+    color: var(--color-text-primary);
+  }
+}
