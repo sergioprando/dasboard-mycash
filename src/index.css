@@ -38,6 +38,10 @@
   --color-text-inverse: var(--color-neutral-0);
   --color-border-default: var(--color-neutral-300);
   --color-accent-primary: var(--color-brand-600);
+  /* Nav (sidebar) — alinhado ao frame Dashboard (node 42-3096) */
+  --color-nav-item-active-bg: var(--color-brand-600);
+  --color-nav-item-active-fg: var(--color-neutral-1000);
+  --color-nav-item-active-icon: var(--color-neutral-1000);
   --color-feedback-success: var(--color-green-600);
   --color-feedback-danger: var(--color-red-600);
   --color-feedback-info: var(--color-blue-600);
@@ -52,6 +56,20 @@
   --text-md: 16px;
   --text-lg: 20px;
   --text-xl: 24px;
+
+  /* Layout - sidebar */
+  --sidebar-width-expanded: 18rem;
+  --sidebar-width-collapsed: 4.75rem;
+  --transition-sidebar-duration: 280ms;
+  --transition-sidebar-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-sidebar-toggle: 0 1px 3px rgb(0 0 0 / 0.12);
+  --size-avatar-md: 2.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-transition {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @theme inline {
@@ -63,6 +81,9 @@
   --color-text-inverse: var(--color-text-inverse);
   --color-border-default: var(--color-border-default);
   --color-accent-primary: var(--color-accent-primary);
+  --color-nav-item-active-bg: var(--color-nav-item-active-bg);
+  --color-nav-item-active-fg: var(--color-nav-item-active-fg);
+  --color-nav-item-active-icon: var(--color-nav-item-active-icon);
   --color-feedback-success: var(--color-feedback-success);
   --color-feedback-danger: var(--color-feedback-danger);
   --color-feedback-info: var(--color-feedback-info);
