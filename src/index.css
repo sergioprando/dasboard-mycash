@@ -64,10 +64,20 @@
   --transition-sidebar-easing: cubic-bezier(0.4, 0, 0.2, 1);
   --shadow-sidebar-toggle: 0 1px 3px rgb(0 0 0 / 0.12);
   --size-avatar-md: 2.5rem;
+  --mobile-header-height: 3.75rem;
+  --color-overlay-scrim: color-mix(
+    in srgb,
+    var(--color-neutral-1000) 42%,
+    transparent
+  );
 }
 
 @media (prefers-reduced-motion: reduce) {
   .sidebar-transition {
+    transition-duration: 0.01ms !important;
+  }
+
+  .mobile-menu-panel {
     transition-duration: 0.01ms !important;
   }
 }
@@ -87,6 +97,7 @@
   --color-feedback-success: var(--color-feedback-success);
   --color-feedback-danger: var(--color-feedback-danger);
   --color-feedback-info: var(--color-feedback-info);
+  --color-overlay-scrim: var(--color-overlay-scrim);
 }
 
 @layer base {

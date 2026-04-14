@@ -4,7 +4,8 @@
 - [x] PROMPT 0: Analise
 - [x] PROMPT 1: Estrutura Base
 - [x] PROMPT 2: Layout Desktop
-- [ ] PROMPT 3: Layout Mobile
+- [x] PROMPT 3: Layout Mobile
+- [ ] PROMPT 4: Context Global
 
 ---
 
@@ -46,7 +47,7 @@ Status: ✅ (revisado com Figma) | Data: 14/04/2026 | Build: ✅
 - Transicao de largura da sidebar; area principal em flex com `min-w-0` para acompanhar sem overflow.
 - Tooltips com atraso (~400ms) nos itens quando colapsada.
 - **Revisao Figma (42-3096):** navegacao principal com **Home** + **Cartões**; item ativo com **fundo verde-limao** (`--color-nav-item-active-bg`), texto e icone **pretos** (`--color-nav-item-active-fg` / `--color-nav-item-active-icon`); cantos mais pill (`--radius-xl`); marca **Mycash+** no topo.
-- Rotas `/transacoes`, `/perfil`, `/objetivos` seguem no router; listagem completa prevista no menu mobile (Prompt 3).
+- Rotas `/transacoes`, `/perfil`, `/objetivos` no router; navegacao completa no menu mobile (`HeaderMobile` / Prompt 3).
 
 ### Tokens
 Semanticas: `--color-bg-surface`, `--color-accent-primary`, `--color-nav-item-active-bg`, `--color-nav-item-active-fg`, `--color-nav-item-active-icon`, `--color-border-default`  
@@ -56,6 +57,28 @@ Layout: `--sidebar-width-expanded`, `--sidebar-width-collapsed`, `--transition-s
 Conversoes:
 - Destaque ativo (lime no layout) -> `--color-nav-item-active-bg` apontando para `--color-brand-600`
 - Texto ativo sobre lime -> `--color-nav-item-active-fg` = `--color-neutral-1000`
+
+### Build
+Tentativas: 1 | Erros: 0
+
+---
+
+## PROMPT 3: Sistema de Layout e Navegacao Mobile
+Status: ✅ | Data: 14/04/2026 | Build: ✅ (1 tentativa)
+
+### Implementado
+- `HeaderMobile`: barra fixa no topo (`lg:hidden`), logo **Mycash+**, avatar abre menu (`aria-controls` / `aria-expanded`).
+- Painel **Menu** (nao fullscreen): animacao slide de cima (~300ms), `max-height` ~70vh com scroll interno.
+- Lista completa: Home, Cartoes, Transacoes, Perfil, Objetivos com icone + texto; rota ativa com fundo preto e texto branco.
+- Botao **Sair** vermelho (`--color-feedback-danger`) no rodape do painel (placeholder ate autenticacao).
+- Fechar: clique no overlay (`--color-overlay-scrim`), botao **X**, tecla **Escape**, ou navegacao apos `NavLink`.
+- `body` com `overflow: hidden` enquanto o menu esta aberto.
+- Breakpoint Tailwind `lg` (>=1024px): sidebar visivel, header mobile oculto — sem coexistencia.
+
+### Tokens
+Semanticas: `--color-bg-surface`, `--color-bg-inverse`, `--color-text-inverse`, `--color-text-secondary`, `--color-border-default`, `--color-feedback-danger`, `--color-overlay-scrim`  
+Primitivas: `--color-neutral-*`, `--space-*`, `--radius-lg`, `--radius-md`, `--text-sm`, `--text-md`, `--text-lg`  
+Layout: `--mobile-header-height`, `--size-avatar-md`, `--shadow-sidebar-toggle`
 
 ### Build
 Tentativas: 1 | Erros: 0

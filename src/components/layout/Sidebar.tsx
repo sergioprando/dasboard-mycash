@@ -8,6 +8,7 @@ import {
   IconChevronRight,
   IconHome,
 } from './SidebarIcons'
+import { MOCK_USER } from './layoutUserMock'
 
 /**
  * Itens principais da sidebar conforme frame Dashboard do arquivo Figma
@@ -18,12 +19,6 @@ const navItems = [
   { label: 'Home', path: APP_ROUTES.dashboard, Icon: IconHome, end: true },
   { label: 'Cartões', path: APP_ROUTES.cards, Icon: IconCard },
 ]
-
-const MOCK_USER = {
-  name: 'Lucas Marte',
-  email: 'lucasmarte@gmail.com',
-  avatarLetter: 'L',
-}
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)

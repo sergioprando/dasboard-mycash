@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import { HeaderMobile } from './HeaderMobile'
 import { Sidebar } from './Sidebar'
 
 export function AppShell() {
@@ -8,19 +9,9 @@ export function AppShell() {
         <Sidebar />
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-          <header className="border-b border-border-default bg-bg-surface px-4 py-4 md:px-6 lg:hidden">
-            <div className="flex items-center justify-between">
-              <p className="text-lg font-semibold">Mycash+</p>
-              <button
-                type="button"
-                className="rounded-full border border-border-default px-[var(--space-12)] py-[var(--space-6)] text-sm"
-              >
-                Menu
-              </button>
-            </div>
-          </header>
+          <HeaderMobile />
 
-          <main className="w-full min-w-0 flex-1 px-4 py-4 transition-[padding] duration-[var(--transition-sidebar-duration)] ease-[var(--transition-sidebar-easing)] md:px-6 md:py-6 lg:px-8 lg:py-8">
+          <main className="w-full min-w-0 flex-1 px-4 pb-4 pt-[calc(var(--mobile-header-height)+var(--space-16))] transition-[padding] duration-[var(--transition-sidebar-duration)] ease-[var(--transition-sidebar-easing)] md:px-6 md:pb-6 lg:px-8 lg:pb-8 lg:pt-8">
             <Outlet />
           </main>
         </div>
