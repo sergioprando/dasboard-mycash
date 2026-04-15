@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useFinance } from '../../hooks/useFinance'
+import { ModalShell } from './modals/ModalShell'
 
 const PAGE_SIZE = 5
 
@@ -66,6 +67,8 @@ export function DetailedStatementWidget() {
   const { transactions, familyMembers, creditCards, bankAccounts } = useFinance()
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
+  const [showTypeModal, setShowTypeModal] = useState(false)
+  const [typeFilter, setTypeFilter] = useState<'all' | 'income' | 'expense'>('expense')
 
   const rows = useMemo(() => {
     const membersById = new Map(familyMembers.map((member) => [member.id, member]))
@@ -73,7 +76,9 @@ export function DetailedStatementWidget() {
     const accountsById = new Map(bankAccounts.map((account) => [account.id, { type: account.type }]))
 
     return transactions
-      .filter((transaction) => transaction.type === 'expense')
+      .filter((transaction) =>
+        typeFilter === 'all' ? true : transaction.type === typeFilter,
+      )
       .filter((transaction) => {
         if (!search.trim()) return true
         const value = search.toLocaleLowerCase('pt-BR')
@@ -102,7 +107,7 @@ export function DetailedStatementWidget() {
           amountLabel: formatCurrency(transaction.value),
         }
       })
-  }, [transactions, familyMembers, creditCards, bankAccounts, search])
+  }, [transactions, familyMembers, creditCards, bankAccounts, search, typeFilter])
 
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE))
   const safePage = Math.min(page, totalPages)
@@ -110,7 +115,8 @@ export function DetailedStatementWidget() {
   const visibleRows = rows.slice(startIndex, startIndex + PAGE_SIZE)
 
   return (
-    <section className="rounded-[var(--radius-lg)] border border-border-default bg-[var(--color-neutral-100)] p-6 md:p-8">
+    <>
+      <section className="rounded-[var(--radius-lg)] border border-border-default bg-[var(--color-neutral-100)] p-6 md:p-8">
       <header className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <h2 className="inline-flex items-center gap-2 text-[20px] font-bold leading-7 text-text-primary">
           <StatementIcon />
@@ -132,9 +138,14 @@ export function DetailedStatementWidget() {
           </label>
           <button
             type="button"
+            onClick={() => setShowTypeModal(true)}
             className="inline-flex items-center gap-1 text-xs font-semibold tracking-[0.3px] text-text-primary"
           >
-            Despesas
+            {typeFilter === 'expense'
+              ? 'Despesas'
+              : typeFilter === 'income'
+                ? 'Receitas'
+                : 'Todos'}
             <span aria-hidden className="text-sm">⌄</span>
           </button>
         </div>
@@ -220,6 +231,39 @@ export function DetailedStatementWidget() {
           </button>
         </div>
       </footer>
-    </section>
+      </section>
+      {showTypeModal ? (
+        <ModalShell
+          title="Filtrar extrato"
+          onClose={() => setShowTypeModal(false)}
+          widthClassName="max-w-[420px]"
+        >
+          <div className="space-y-2">
+            {[
+              { id: 'all', label: 'Todos' },
+              { id: 'income', label: 'Receitas' },
+              { id: 'expense', label: 'Despesas' },
+            ].map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => {
+                  setTypeFilter(opt.id as 'all' | 'income' | 'expense')
+                  setPage(1)
+                  setShowTypeModal(false)
+                }}
+                className={`w-full rounded-md border border-border-default px-3 py-2 text-left text-sm ${
+                  typeFilter === opt.id
+                    ? 'bg-bg-inverse text-text-inverse'
+                    : 'bg-[var(--color-neutral-100)] text-text-primary'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </ModalShell>
+      ) : null}
+    </>
   )
 }

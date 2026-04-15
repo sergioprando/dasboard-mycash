@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFinance } from '../../hooks/useFinance'
 import type { CreditCard } from '../../types'
+import { AddCreditCardModal } from './modals/AddCreditCardModal'
+import { CardDetailsModal } from './modals/CardDetailsModal'
 
 const PAGE_SIZE = 3
 
@@ -45,101 +47,11 @@ function CardGlyph({ color }: { color: string }) {
   )
 }
 
-function CardDetailsModal({
-  card,
-  onClose,
-}: {
-  card: CreditCard
-  onClose: () => void
-}) {
-  const { transactions } = useFinance()
-
-  useEffect(() => {
-    const onEsc = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose()
-    }
-    document.body.style.overflow = 'hidden'
-    window.addEventListener('keydown', onEsc)
-    return () => {
-      document.body.style.overflow = ''
-      window.removeEventListener('keydown', onEsc)
-    }
-  }, [onClose])
-
-  const expenses = useMemo(
-    () =>
-      transactions
-        .filter((t) => t.type === 'expense' && t.accountId === card.id)
-        .sort((a, b) => (a.date < b.date ? 1 : -1))
-        .slice(0, 8),
-    [transactions, card.id],
-  )
-
-  const usagePercent = Math.round((card.currentBill / card.limit) * 100)
-
-  return (
-    <div className="fixed inset-0 z-[140] flex items-center justify-center p-4">
-      <button
-        type="button"
-        className="absolute inset-0 bg-[var(--color-overlay-scrim)]"
-        onClick={onClose}
-        aria-label="Fechar detalhes do cartão"
-      />
-      <div className="relative z-10 w-full max-w-[640px] rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-5 shadow-[var(--shadow-sidebar-toggle)]">
-        <div className="mb-4 flex items-start justify-between gap-3">
-          <div>
-            <h3 className="text-lg font-semibold text-text-primary">{card.name}</h3>
-            <p className="text-sm text-text-secondary">Cartão de crédito</p>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="h-9 w-9 rounded-full border border-border-default text-text-secondary"
-            aria-label="Fechar"
-          >
-            ✕
-          </button>
-        </div>
-
-        <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-3">
-          <div className="rounded-[var(--radius-md)] border border-border-default p-3">
-            <p className="text-xs text-text-secondary">Limite total</p>
-            <p className="mt-1 text-sm font-semibold text-text-primary">{formatCurrency(card.limit)}</p>
-          </div>
-          <div className="rounded-[var(--radius-md)] border border-border-default p-3">
-            <p className="text-xs text-text-secondary">Fatura atual</p>
-            <p className="mt-1 text-sm font-semibold text-text-primary">{formatCurrency(card.currentBill)}</p>
-          </div>
-          <div className="rounded-[var(--radius-md)] border border-border-default p-3">
-            <p className="text-xs text-text-secondary">Uso</p>
-            <p className="mt-1 text-sm font-semibold text-text-primary">{usagePercent}%</p>
-          </div>
-        </div>
-
-        <div className="rounded-[var(--radius-md)] border border-border-default p-3">
-          <p className="mb-2 text-sm font-semibold text-text-primary">Despesas recentes</p>
-          {expenses.length === 0 ? (
-            <p className="text-sm text-text-secondary">Nenhuma despesa registrada neste cartão.</p>
-          ) : (
-            <ul className="space-y-2">
-              {expenses.map((tx) => (
-                <li key={tx.id} className="flex items-center justify-between text-sm">
-                  <span className="truncate text-text-primary">{tx.description}</span>
-                  <span className="font-semibold text-text-primary">{formatCurrency(tx.value)}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export function CreditCardsWidget() {
   const { creditCards } = useFinance()
   const [page, setPage] = useState(0)
   const [selectedCard, setSelectedCard] = useState<CreditCard | null>(null)
+  const [showAddModal, setShowAddModal] = useState(false)
 
   const totalPages = Math.max(1, Math.ceil(creditCards.length / PAGE_SIZE))
   const safePage = Math.min(page, totalPages - 1)
@@ -165,6 +77,7 @@ export function CreditCardsWidget() {
           <div className="flex items-center gap-2">
             <button
               type="button"
+              onClick={() => setShowAddModal(true)}
               className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border-default bg-bg-surface text-lg leading-none hover:bg-[var(--color-neutral-200)]"
               aria-label="Adicionar novo cartão"
             >
@@ -251,6 +164,9 @@ export function CreditCardsWidget() {
 
       {selectedCard ? (
         <CardDetailsModal card={selectedCard} onClose={() => setSelectedCard(null)} />
+      ) : null}
+      {showAddModal ? (
+        <AddCreditCardModal onClose={() => setShowAddModal(false)} />
       ) : null}
     </>
   )

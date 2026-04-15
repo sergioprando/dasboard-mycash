@@ -151,6 +151,14 @@
     background-color: var(--color-bg-default);
     color: var(--color-text-primary);
   }
+
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  a[href],
+  input[type='button']:not(:disabled),
+  input[type='submit']:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 @layer utilities {

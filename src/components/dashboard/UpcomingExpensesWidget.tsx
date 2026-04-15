@@ -1,5 +1,6 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useFinance } from '../../hooks/useFinance'
+import { NewTransactionModal } from './modals/NewTransactionModal'
 import { IconCard } from '../layout/SidebarIcons'
 
 type UpcomingExpense = {
@@ -68,6 +69,7 @@ function IconCheck() {
 
 export function UpcomingExpensesWidget() {
   const { transactions, creditCards, bankAccounts } = useFinance()
+  const [showNewTransactionModal, setShowNewTransactionModal] = useState(false)
 
   const expenses = useMemo<UpcomingExpense[]>(() => {
     const cardById = new Map(
@@ -126,7 +128,8 @@ export function UpcomingExpensesWidget() {
   }, [transactions, creditCards, bankAccounts])
 
   return (
-    <section className="min-w-0 rounded-[var(--radius-lg)] border border-border-default bg-[var(--color-neutral-100)] p-6 md:p-8 xl:flex xl:h-[388px] xl:flex-col">
+    <>
+      <section className="min-w-0 rounded-[var(--radius-lg)] border border-border-default bg-[var(--color-neutral-100)] p-6 md:p-8 xl:flex xl:h-[388px] xl:flex-col">
       <header className="mb-8 flex items-center justify-between gap-3 xl:mb-6">
         <h2 className="inline-flex items-center gap-2 text-[20px] font-bold leading-7 text-text-primary">
           <IconCard className="h-6 w-6 shrink-0" />
@@ -134,6 +137,7 @@ export function UpcomingExpensesWidget() {
         </h2>
         <button
           type="button"
+          onClick={() => setShowNewTransactionModal(true)}
           aria-label="Adicionar despesa"
           className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border-default text-[30px] leading-none text-text-primary hover:bg-[var(--color-neutral-200)]"
         >
@@ -175,6 +179,10 @@ export function UpcomingExpensesWidget() {
           ))}
         </div>
       )}
-    </section>
+      </section>
+      {showNewTransactionModal ? (
+        <NewTransactionModal onClose={() => setShowNewTransactionModal(false)} />
+      ) : null}
+    </>
   )
 }

@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useFinance } from '../../hooks/useFinance'
+import { AddMemberModal } from './modals/AddMemberModal'
+import { MobileFiltersModal } from './modals/MobileFiltersModal'
+import { NewTransactionModal } from './modals/NewTransactionModal'
 
 type TypeFilter = 'all' | 'income' | 'expense'
 type QuickRangeId = 'this-month' | 'last-month' | 'last-3-months' | 'this-year'
@@ -75,6 +78,8 @@ export function DashboardHeader() {
   const [showTypePopover, setShowTypePopover] = useState(false)
   const [showDatePopover, setShowDatePopover] = useState(false)
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false)
+  const [showNewTransactionModal, setShowNewTransactionModal] = useState(false)
   const [localStartDate, setLocalStartDate] = useState(dateRange.startDate)
   const [localEndDate, setLocalEndDate] = useState(dateRange.endDate)
 
@@ -82,17 +87,6 @@ export function DashboardHeader() {
     setLocalStartDate(dateRange.startDate)
     setLocalEndDate(dateRange.endDate)
   }, [dateRange])
-
-  useEffect(() => {
-    if (showMobileFilters) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [showMobileFilters])
 
   const dateRangeLabel = useMemo(
     () => formatRange(dateRange.startDate, dateRange.endDate),
@@ -246,6 +240,7 @@ export function DashboardHeader() {
 
             <button
               type="button"
+              onClick={() => setShowAddMemberModal(true)}
               className="ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-border-default bg-[var(--color-neutral-100)] text-lg"
               title="Adicionar membro"
             >
@@ -255,6 +250,7 @@ export function DashboardHeader() {
 
           <button
             type="button"
+            onClick={() => setShowNewTransactionModal(true)}
             className="h-11 rounded-full bg-bg-inverse px-5 text-sm font-semibold text-text-inverse md:min-w-[170px]"
           >
             + Nova Transação
@@ -280,53 +276,23 @@ export function DashboardHeader() {
       </div>
 
       {showMobileFilters ? (
-        <div className="fixed inset-0 z-[120] md:hidden">
-          <div className="absolute inset-0 bg-[var(--color-overlay-scrim)]" onClick={() => setShowMobileFilters(false)} />
-          <div className="absolute inset-x-0 bottom-0 top-[20%] rounded-t-[var(--radius-lg)] border-t border-border-default bg-bg-surface p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <h3 className="text-base font-semibold">Filtros</h3>
-              <button type="button" onClick={() => setShowMobileFilters(false)} className="h-10 w-10 rounded-full border border-border-default">✕</button>
-            </div>
-
-            <p className="mb-2 text-xs font-semibold uppercase text-text-secondary">Tipo de Transação</p>
-            <div className="mb-4 flex gap-2">
-              {typeOptions.map((opt) => (
-                <button
-                  key={opt.id}
-                  type="button"
-                  onClick={() => setTransactionType(opt.id)}
-                  className={`rounded-full px-3 py-2 text-xs font-medium ${
-                    transactionType === opt.id
-                      ? 'bg-bg-inverse text-text-inverse'
-                      : 'bg-[var(--color-neutral-100)] text-text-secondary'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-
-            <p className="mb-2 text-xs font-semibold uppercase text-text-secondary">Período</p>
-            <div className="mb-3 grid grid-cols-1 gap-2">
-              <input type="date" value={localStartDate} onChange={(e) => setLocalStartDate(e.target.value)} className="rounded-md border border-border-default px-2 py-2 text-sm" />
-              <input type="date" value={localEndDate} onChange={(e) => setLocalEndDate(e.target.value)} className="rounded-md border border-border-default px-2 py-2 text-sm" />
-            </div>
-            <div className="mb-4 flex flex-wrap gap-2">
-              <button type="button" onClick={() => setQuickRange('this-month')} className="rounded-full border border-border-default px-3 py-1 text-xs">Este mês</button>
-              <button type="button" onClick={() => setQuickRange('last-month')} className="rounded-full border border-border-default px-3 py-1 text-xs">Mês passado</button>
-              <button type="button" onClick={() => setQuickRange('last-3-months')} className="rounded-full border border-border-default px-3 py-1 text-xs">Últimos 3 meses</button>
-              <button type="button" onClick={() => setQuickRange('this-year')} className="rounded-full border border-border-default px-3 py-1 text-xs">Este ano</button>
-            </div>
-
-            <button
-              type="button"
-              onClick={applyDateRange}
-              className="h-12 w-full rounded-full bg-bg-inverse text-sm font-semibold text-text-inverse"
-            >
-              Aplicar Filtros
-            </button>
-          </div>
-        </div>
+        <MobileFiltersModal
+          onClose={() => setShowMobileFilters(false)}
+          transactionType={transactionType}
+          setTransactionType={setTransactionType}
+          localStartDate={localStartDate}
+          localEndDate={localEndDate}
+          setLocalStartDate={setLocalStartDate}
+          setLocalEndDate={setLocalEndDate}
+          setQuickRange={setQuickRange}
+          applyDateRange={applyDateRange}
+        />
+      ) : null}
+      {showAddMemberModal ? (
+        <AddMemberModal onClose={() => setShowAddMemberModal(false)} />
+      ) : null}
+      {showNewTransactionModal ? (
+        <NewTransactionModal onClose={() => setShowNewTransactionModal(false)} />
       ) : null}
     </header>
   )
