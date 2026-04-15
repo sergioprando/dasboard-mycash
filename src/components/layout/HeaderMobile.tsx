@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
 import { IconClose } from './SidebarIcons'
 import { MOCK_USER } from './layoutUserMock'
 import { mobileNavItems } from './mobileNavItems'
 
 export function HeaderMobile() {
+  const { signOut } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const [panelEntered, setPanelEntered] = useState(false)
 
@@ -38,7 +40,7 @@ export function HeaderMobile() {
 
   const handleLogout = () => {
     closeMenu()
-    // TODO: integrar fluxo de logout quando autenticação existir
+    void signOut()
   }
 
   return (
