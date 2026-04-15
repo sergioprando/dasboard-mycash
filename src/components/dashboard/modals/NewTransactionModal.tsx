@@ -7,23 +7,27 @@ type NewTransactionModalProps = {
   onClose: () => void
 }
 
-function toInputDate(value: string): string {
-  return value.slice(0, 10)
+function formatCurrencyInput(rawValue: string): string {
+  const digits = rawValue.replace(/\D/g, '')
+  if (!digits) return 'R$ 0,00'
+  const amount = Number(digits) / 100
+  return amount.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })
 }
 
 export function NewTransactionModal({ onClose }: NewTransactionModalProps) {
-  const { familyMembers, creditCards, bankAccounts, addTransaction } = useFinance()
-  const [type, setType] = useState<TransactionType>('expense')
+  const { familyMembers, creditCards, bankAccounts, transactions, addTransaction } = useFinance()
+  const [type, setType] = useState<TransactionType>('income')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
-  const [value, setValue] = useState('')
-  const [date, setDate] = useState(toInputDate(new Date().toISOString()))
-  const [dueDate, setDueDate] = useState('')
-  const [memberId, setMemberId] = useState<string>('')
-  const [accountId, setAccountId] = useState<string>('')
-  const [installments, setInstallments] = useState('1')
-  const [isRecurring, setIsRecurring] = useState(false)
-  const [isPaid, setIsPaid] = useState(type === 'income')
+  const [valueLabel, setValueLabel] = useState('R$ 0,00')
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10))
+  const [memberId, setMemberId] = useState<string>(familyMembers[0]?.id ?? '')
+  const [accountId, setAccountId] = useState<string>(
+    bankAccounts[0]?.id ?? creditCards[0]?.id ?? '',
+  )
 
   const accountOptions = useMemo(
     () => [
@@ -33,12 +37,31 @@ export function NewTransactionModal({ onClose }: NewTransactionModalProps) {
     [bankAccounts, creditCards],
   )
 
+  const categoryOptions = useMemo(
+    () =>
+      Array.from(
+        new Set([
+          ...transactions.map((transaction) => transaction.category),
+          'Alimentação',
+          'Moradia',
+          'Transporte',
+          'Lazer',
+          'Saúde',
+          'Educação',
+          'Investimentos',
+          'Salário',
+        ]),
+      ),
+    [transactions],
+  )
+
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
-    const numericValue = Number(value)
-    const numericInstallments = Math.max(1, Number(installments))
+    const numericValue = Number(valueLabel.replace(/\D/g, '')) / 100
 
-    if (!description.trim() || !category.trim() || !accountId || !Number.isFinite(numericValue)) return
+    if (!description.trim() || !category.trim() || !accountId || !Number.isFinite(numericValue)) {
+      return
+    }
 
     const tx: Transaction = {
       id: `tx-${Date.now()}`,
@@ -47,14 +70,14 @@ export function NewTransactionModal({ onClose }: NewTransactionModalProps) {
       category: category.trim(),
       value: numericValue,
       date,
-      dueDate: dueDate || undefined,
+      dueDate: type === 'expense' ? date : undefined,
       memberId: memberId || null,
       accountId,
-      installments: numericInstallments,
-      currentInstallment: numericInstallments > 1 ? 1 : undefined,
-      isRecurring,
-      isPaid,
-      status: isPaid ? 'completed' : 'pending',
+      installments: 1,
+      currentInstallment: undefined,
+      isRecurring: false,
+      isPaid: type === 'income',
+      status: type === 'income' ? 'completed' : 'pending',
     }
 
     addTransaction(tx)
@@ -63,125 +86,139 @@ export function NewTransactionModal({ onClose }: NewTransactionModalProps) {
 
   return (
     <ModalShell title="Nova transação" onClose={onClose} widthClassName="max-w-[760px]">
+      <p className="mb-5 text-sm tracking-[0.3px] text-text-secondary">
+        Registre entradas e saídas para manter seu controle.
+      </p>
       <form onSubmit={onSubmit} className="space-y-4">
-        <div className="flex gap-2">
-          {(['expense', 'income'] as const).map((valueType) => (
-            <button
-              key={valueType}
-              type="button"
-              onClick={() => {
-                setType(valueType)
-                if (valueType === 'income') setIsPaid(true)
-              }}
-              className={`rounded-full px-4 py-2 text-sm font-semibold ${
-                type === valueType
-                  ? 'bg-bg-inverse text-text-inverse'
-                  : 'bg-[var(--color-neutral-100)] text-text-secondary'
-              }`}
-            >
-              {valueType === 'expense' ? 'Despesa' : 'Receita'}
-            </button>
-          ))}
+        <div className="mx-auto flex w-full max-w-[420px] rounded-full border border-border-default p-1">
+          <button
+            type="button"
+            onClick={() => setType('income')}
+            className={`h-10 flex-1 rounded-full text-sm font-semibold ${
+              type === 'income'
+                ? 'bg-bg-inverse text-text-inverse'
+                : 'bg-transparent text-text-primary'
+            }`}
+          >
+            Receita
+          </button>
+          <button
+            type="button"
+            onClick={() => setType('expense')}
+            className={`h-10 flex-1 rounded-full text-sm font-semibold ${
+              type === 'expense'
+                ? 'bg-bg-inverse text-text-inverse'
+                : 'bg-transparent text-text-primary'
+            }`}
+          >
+            Despesas
+          </button>
         </div>
 
         <div className="grid gap-3 md:grid-cols-2">
+          <label className="space-y-1.5">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">
+              Valor da transação
+            </span>
+            <input
+              value={valueLabel}
+              onChange={(e) => setValueLabel(formatCurrencyInput(e.target.value))}
+              placeholder="R$ 0,00"
+              className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+            />
+          </label>
+          <label className="space-y-1.5">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Data</span>
+            <input
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              type="date"
+              className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+            />
+          </label>
+        </div>
+
+        <label className="block space-y-1.5">
+          <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Descrição</span>
           <input
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Descrição"
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
-            required
+            placeholder="EX: Supermercado Semanal"
+            className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
           />
-          <input
+        </label>
+
+        <div>
+          <div className="mb-1.5 flex items-center justify-between">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Categoria</span>
+            <button
+              type="button"
+              className="text-xs font-semibold tracking-[0.3px] text-text-primary"
+            >
+              + Nova categoria
+            </button>
+          </div>
+          <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            placeholder="Categoria"
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
-            required
-          />
-          <input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="Valor"
-            type="number"
-            min="0"
-            step="0.01"
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
-            required
-          />
-          <input
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            type="date"
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
-            required
-          />
-          <input
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            type="date"
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
-          />
-          <select
-            value={memberId}
-            onChange={(e) => setMemberId(e.target.value)}
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
+            className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
           >
-            <option value="">Família (sem membro)</option>
-            {familyMembers.map((member) => (
-              <option key={member.id} value={member.id}>
-                {member.name}
+            <option value="">Selecione a categoria</option>
+            {categoryOptions.map((item) => (
+              <option key={item} value={item}>
+                {item}
               </option>
             ))}
           </select>
-          <select
-            value={accountId}
-            onChange={(e) => setAccountId(e.target.value)}
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
-            required
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          <label className="space-y-1.5">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Responsável</span>
+            <select
+              value={memberId}
+              onChange={(e) => setMemberId(e.target.value)}
+              className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+            >
+              <option value="">Familiar</option>
+              {familyMembers.map((member) => (
+                <option key={member.id} value={member.id}>
+                  {member.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="space-y-1.5">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Conta</span>
+            <select
+              value={accountId}
+              onChange={(e) => setAccountId(e.target.value)}
+              className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+            >
+              {accountOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div className="mt-2 flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-11 rounded-full border border-border-default px-6 text-sm font-semibold text-text-primary"
           >
-            <option value="">Selecione conta/cartão</option>
-            {accountOptions.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <input
-            value={installments}
-            onChange={(e) => setInstallments(e.target.value)}
-            type="number"
-            min="1"
-            placeholder="Parcelas"
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
-          />
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            className="h-11 rounded-full bg-bg-inverse px-6 text-sm font-semibold text-text-inverse"
+          >
+            Salvar transação
+          </button>
         </div>
-
-        <div className="flex flex-wrap items-center gap-4 text-sm text-text-secondary">
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={isRecurring}
-              onChange={(e) => setIsRecurring(e.target.checked)}
-            />
-            Recorrente
-          </label>
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={isPaid}
-              onChange={(e) => setIsPaid(e.target.checked)}
-            />
-            Já pago
-          </label>
-        </div>
-
-        <button
-          type="submit"
-          className="h-11 w-full rounded-full bg-bg-inverse px-5 text-sm font-semibold text-text-inverse"
-        >
-          Salvar transação
-        </button>
       </form>
     </ModalShell>
   )

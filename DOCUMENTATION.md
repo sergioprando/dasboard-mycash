@@ -11,7 +11,21 @@
 - [x] PROMPT 7: Carrossel de Gastos por Categoria
 - [x] PROMPT 8: Grafico de Fluxo Financeiro
 - [x] PROMPT 9: Widget de Cartoes de Credito
-- [ ] PROMPT 10: Widget de Proximas Despesas
+- [x] PROMPT 10: Widget de Proximas Despesas
+- [x] PROMPT 11: Tabela de Transações Detalhada
+- [x] PROMPT 12: Modal de Nova Transação
+- [x] PROMPT 13: Modal de Adicionar Membro
+- [x] PROMPT 14: Modal de Adicionar Cartão
+- [x] PROMPT 15: Modal de Detalhes do Cartão
+- [x] PROMPT 16: Modal de Filtros Mobile
+- [x] PROMPT 17: View Completa de Cartões
+- [x] PROMPT 18: View Completa de Transações
+- [x] PROMPT 19: View de Perfil - Aba Informações
+- [x] PROMPT 20: View de Perfil - Aba Configurações
+- [x] PROMPT 21: Animações e Transições Globais
+- [x] PROMPT 22: Formatação e Utilitários
+- [x] PROMPT 23: Responsividade e Ajustes Finais
+- [x] PROMPT 24: Testes e Validação Final
 
 ---
 

@@ -15,10 +15,10 @@ export function DashboardPage() {
   const expense = finance.calculateExpensesForPeriod()
 
   return (
-    <section className="space-y-4">
+    <section className="animate-page-in space-y-4">
       <DashboardHeader />
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
-        <div className="min-w-0 space-y-4">
+      <div className="animate-card-in grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
+        <div className="animate-card-in min-w-0 space-y-4">
           <ExpensesByCategoryCarousel />
           <SummaryCards
             totalBalance={balance}
@@ -27,13 +27,13 @@ export function DashboardPage() {
             filteredTransactions={filtered}
           />
         </div>
-        <div className="min-w-0">
+        <div className="animate-card-in min-w-0">
           <CreditCardsWidget />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
-        <div className="min-w-0">
+      <div className="animate-card-in grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
+        <div className="animate-card-in min-w-0">
           <FinancialFlowChart />
         </div>
         <UpcomingExpensesWidget />

@@ -7,6 +7,7 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconHome,
+  IconUser,
 } from './SidebarIcons'
 import { MOCK_USER } from './layoutUserMock'
 
@@ -18,6 +19,7 @@ import { MOCK_USER } from './layoutUserMock'
 const navItems = [
   { label: 'Home', path: APP_ROUTES.dashboard, Icon: IconHome, end: true },
   { label: 'Cartões', path: APP_ROUTES.cards, Icon: IconCard },
+  { label: 'Perfil', path: APP_ROUTES.profile, Icon: IconUser },
 ]
 
 export function Sidebar() {

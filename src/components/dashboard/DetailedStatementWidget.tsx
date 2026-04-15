@@ -1,21 +1,9 @@
 import { useMemo, useState } from 'react'
 import { useFinance } from '../../hooks/useFinance'
+import { formatCurrencyBRL, formatDateBR } from '../../utils/formatters'
 import { ModalShell } from './modals/ModalShell'
 
 const PAGE_SIZE = 5
-
-function formatDate(isoDate: string): string {
-  const [year, month, day] = isoDate.split('-')
-  if (!year || !month || !day) return '--/--/----'
-  return `${day}/${month}/${year}`
-}
-
-function formatCurrency(value: number): string {
-  return value.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  })
-}
 
 function resolveAccountLabel(
   accountId: string,
@@ -99,12 +87,12 @@ export function DetailedStatementWidget() {
           id: transaction.id,
           memberName: member?.name ?? 'Família',
           memberAvatar: member?.avatarUrl ?? '',
-          dateLabel: formatDate(transaction.date),
+          dateLabel: formatDateBR(transaction.date),
           description: transaction.description,
           category: transaction.category,
           accountLabel: resolveAccountLabel(transaction.accountId, cardsById, accountsById),
           installmentLabel,
-          amountLabel: formatCurrency(transaction.value),
+          amountLabel: formatCurrencyBRL(transaction.value),
         }
       })
   }, [transactions, familyMembers, creditCards, bankAccounts, search, typeFilter])
@@ -151,7 +139,7 @@ export function DetailedStatementWidget() {
         </div>
       </header>
 
-      <div className="overflow-x-auto">
+      <div className="hidden overflow-x-auto md:block">
         <table className="min-w-[920px] w-full table-fixed">
           <thead>
             <tr className="text-left">
@@ -193,6 +181,25 @@ export function DetailedStatementWidget() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="space-y-3 md:hidden">
+        {visibleRows.map((row) => (
+          <article
+            key={row.id}
+            className="rounded-[var(--radius-md)] border border-border-default bg-bg-surface p-3"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-sm font-semibold text-text-primary">{row.description}</p>
+              <p className="text-sm font-semibold text-text-primary">{row.amountLabel}</p>
+            </div>
+            <p className="mt-1 text-xs text-text-secondary">
+              {row.dateLabel} · {row.category}
+            </p>
+            <p className="mt-1 text-xs text-text-secondary">
+              {row.accountLabel} · Parcela {row.installmentLabel}
+            </p>
+          </article>
+        ))}
       </div>
 
       <footer className="mt-10 flex items-center justify-between">

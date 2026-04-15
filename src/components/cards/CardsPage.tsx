@@ -1,15 +1,9 @@
 import { useMemo, useState } from 'react'
 import { useFinance } from '../../hooks/useFinance'
 import type { CreditCard } from '../../types'
+import { formatCurrencyBRL } from '../../utils/formatters'
 import { AddCreditCardModal } from '../dashboard/modals/AddCreditCardModal'
 import { CardDetailsModal } from '../dashboard/modals/CardDetailsModal'
-
-function formatCurrency(value: number): string {
-  return value.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  })
-}
 
 function themeClass(theme: CreditCard['theme']): string {
   if (theme === 'black') return 'bg-[var(--color-neutral-1000)] text-[var(--color-neutral-0)]'
@@ -42,8 +36,8 @@ export function CardsPage() {
 
   return (
     <>
-      <section className="space-y-4">
-        <header className="rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-6">
+      <section className="animate-page-in space-y-4">
+        <header className="animate-card-in rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-2xl font-semibold text-text-primary">Cartões e contas</h1>
@@ -63,13 +57,13 @@ export function CardsPage() {
             <div className="rounded-[var(--radius-md)] border border-border-default bg-[var(--color-neutral-100)] p-4">
               <p className="text-xs text-text-secondary">Limite total</p>
               <p className="mt-1 text-xl font-semibold text-text-primary">
-                {formatCurrency(summary.totalLimit)}
+                {formatCurrencyBRL(summary.totalLimit)}
               </p>
             </div>
             <div className="rounded-[var(--radius-md)] border border-border-default bg-[var(--color-neutral-100)] p-4">
               <p className="text-xs text-text-secondary">Fatura consolidada</p>
               <p className="mt-1 text-xl font-semibold text-text-primary">
-                {formatCurrency(summary.totalBill)}
+                {formatCurrencyBRL(summary.totalBill)}
               </p>
             </div>
             <div className="rounded-[var(--radius-md)] border border-border-default bg-[var(--color-neutral-100)] p-4">
@@ -80,7 +74,7 @@ export function CardsPage() {
         </header>
 
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-          <section className="rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-6">
+          <section className="animate-card-in rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-6">
             <h2 className="mb-4 text-lg font-semibold text-text-primary">Meus cartões</h2>
             <div className="grid gap-3 md:grid-cols-2">
               {creditCards.map((card) => {
@@ -91,13 +85,13 @@ export function CardsPage() {
                     key={card.id}
                     type="button"
                     onClick={() => setSelectedCard(card)}
-                    className={`rounded-[var(--radius-md)] border border-border-default p-4 text-left transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-sidebar-toggle)] ${themeClass(card.theme)}`}
+                    className={`hover-lift rounded-[var(--radius-md)] border border-border-default p-4 text-left hover:shadow-[var(--shadow-sidebar-toggle)] ${themeClass(card.theme)}`}
                   >
                     <p className="text-sm font-semibold">{card.name}</p>
                     <p className="mt-1 text-xs opacity-80">Titular: {holder?.name ?? 'Não informado'}</p>
-                    <p className="mt-4 text-2xl font-bold">{formatCurrency(card.currentBill)}</p>
+                    <p className="mt-4 text-2xl font-bold">{formatCurrencyBRL(card.currentBill)}</p>
                     <div className="mt-3 flex items-center justify-between text-xs">
-                      <span>Limite: {formatCurrency(card.limit)}</span>
+                      <span>Limite: {formatCurrencyBRL(card.limit)}</span>
                       <span>{usagePercent}%</span>
                     </div>
                   </button>
@@ -106,7 +100,7 @@ export function CardsPage() {
             </div>
           </section>
 
-          <section className="rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-6">
+          <section className="animate-card-in rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-6">
             <h2 className="mb-4 text-lg font-semibold text-text-primary">Despesas recentes por cartão</h2>
             <div className="space-y-4">
               {recentByCard.map((cardGroup) => (
@@ -120,7 +114,7 @@ export function CardsPage() {
                         <li key={item.id} className="flex items-center justify-between text-xs">
                           <span className="truncate text-text-primary">{item.description}</span>
                           <span className="font-semibold text-text-primary">
-                            {formatCurrency(item.value)}
+                            {formatCurrencyBRL(item.value)}
                           </span>
                         </li>
                       ))}

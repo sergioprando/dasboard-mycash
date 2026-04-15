@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useFinance } from '../../hooks/useFinance'
 import type { CreditCard } from '../../types'
 import { AddCreditCardModal } from './modals/AddCreditCardModal'
@@ -59,12 +59,6 @@ export function CreditCardsWidget() {
     safePage * PAGE_SIZE,
     safePage * PAGE_SIZE + PAGE_SIZE,
   )
-
-  useEffect(() => {
-    if (page > totalPages - 1) {
-      setPage(Math.max(0, totalPages - 1))
-    }
-  }, [page, totalPages])
 
   return (
     <>

@@ -96,6 +96,11 @@
     var(--color-neutral-1000) 42%,
     transparent
   );
+  --motion-duration-fast: 180ms;
+  --motion-duration-base: 260ms;
+  --motion-duration-slow: 420ms;
+  --motion-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -105,6 +110,17 @@
 
   .mobile-menu-panel {
     transition-duration: 0.01ms !important;
+  }
+
+  .motion-safe,
+  .animate-page-in,
+  .animate-card-in,
+  .animate-modal-overlay,
+  .animate-modal-pop,
+  .hover-lift {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    transform: none !important;
   }
 }
 
@@ -162,6 +178,82 @@
 }
 
 @layer utilities {
+  @keyframes page-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes card-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.995);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes overlay-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes modal-pop {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .motion-safe {
+    transition-timing-function: var(--motion-ease-standard);
+    transition-duration: var(--motion-duration-base);
+  }
+
+  .animate-page-in {
+    animation: page-fade-up var(--motion-duration-slow) var(--motion-ease-standard)
+      both;
+  }
+
+  .animate-card-in {
+    animation: card-fade-up var(--motion-duration-base) var(--motion-ease-standard)
+      both;
+  }
+
+  .animate-modal-overlay {
+    animation: overlay-fade var(--motion-duration-fast) var(--motion-ease-standard)
+      both;
+  }
+
+  .animate-modal-pop {
+    animation: modal-pop var(--motion-duration-base) var(--motion-ease-standard)
+      both;
+  }
+
+  .hover-lift {
+    transition: transform var(--motion-duration-fast) var(--motion-ease-standard),
+      box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;

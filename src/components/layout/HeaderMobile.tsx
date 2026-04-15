@@ -11,10 +11,7 @@ export function HeaderMobile() {
   const closeMenu = useCallback(() => setMenuOpen(false), [])
 
   useEffect(() => {
-    if (!menuOpen) {
-      setPanelEntered(false)
-      return
-    }
+    if (!menuOpen) return
     const id = window.requestAnimationFrame(() => setPanelEntered(true))
     return () => window.cancelAnimationFrame(id)
   }, [menuOpen])
