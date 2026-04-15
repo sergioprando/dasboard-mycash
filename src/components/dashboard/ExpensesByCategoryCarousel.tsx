@@ -97,7 +97,7 @@ export function ExpensesByCategoryCarousel() {
   }
 
   return (
-    <section className="rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-4 md:p-6">
+    <section className="min-w-0 rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-4 md:p-6">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-sm font-semibold text-text-primary">Gastos por categoria</h2>
       </div>
@@ -108,7 +108,7 @@ export function ExpensesByCategoryCarousel() {
         </div>
       ) : (
         <div
-          className="relative"
+          className="relative min-w-0"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => {
             setIsHovering(false)
@@ -117,7 +117,7 @@ export function ExpensesByCategoryCarousel() {
         >
           <div
             ref={scrollRef}
-            className={`no-scrollbar flex gap-3 overflow-x-auto pr-2 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} touch-pan-x`}
+            className={`no-scrollbar flex w-full min-w-0 gap-3 overflow-x-auto pr-2 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} touch-pan-x`}
             onScroll={updateScrollState}
             onWheel={onWheel}
             onMouseDown={onMouseDown}

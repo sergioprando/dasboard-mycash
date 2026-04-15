@@ -10,7 +10,8 @@
 - [x] PROMPT 5: Cards de Resumo Financeiro
 - [x] PROMPT 7: Carrossel de Gastos por Categoria
 - [x] PROMPT 8: Grafico de Fluxo Financeiro
-- [ ] PROMPT 9: Widget de Cartoes de Credito
+- [x] PROMPT 9: Widget de Cartoes de Credito
+- [ ] PROMPT 10: Widget de Proximas Despesas
 
 ---
 
@@ -206,3 +207,36 @@ Primitivas: `--color-accent-primary`, `--color-neutral-*`, `--color-green-600`
 ### Build
 Tentativas: 1 | Erros: 0  
 Observacao: Vite apontou warning de chunk > 500kB (nao bloqueante).
+
+---
+
+## PROMPT 9: Widget de Cartoes de Credito
+Status: ✅ | Data: 14/04/2026 | Build: ✅ (1 tentativa)
+
+### Referencia Figma
+- [Cards & contas — node 42-3111](https://www.figma.com/design/6cR4IHgqeZryX55fuJPlvK/Workshop---Do-figma-MCP-ao-Cursor-AI-v.3--Community--Capgemini-Prot%C3%B3tipo?node-id=42-3111&t=OXZmdYsD7ibEEzB2-4)
+
+### Implementado
+- `CreditCardsWidget` criado com container, header e acoes (`+` e seta).
+- Lista de cartoes renderizada a partir de `creditCards` do contexto.
+- Card de cada item com:
+  - bloco visual de tema (`black` / `lime` / `white`) + icone de cartao,
+  - banco/nome resumido,
+  - fatura atual em destaque,
+  - final mascarado (`•••• 1234`),
+  - badge de uso `%` calculado por `(currentBill / limit) * 100`.
+- Hover com elevacao (`translateY`) e sombra sutil.
+- Clique no item abre modal de detalhes (`CardDetailsModal`) com:
+  - limite total, fatura atual, uso %,
+  - despesas recentes do cartao filtradas de `transactions`.
+- Fechamento do modal por overlay, `X` e tecla `Esc`.
+- Layout do dashboard ajustado para coluna lateral direita de cards.
+- Bloco inferior reorganizado para abrir espaco do Prompt 10 (placeholder de próximas despesas).
+
+### Tokens
+Semânticas: `--color-bg-surface`, `--color-border-default`, `--color-text-primary`, `--color-text-secondary`, `--color-overlay-scrim`  
+Primitivas: `--color-neutral-*`, `--color-accent-primary`, `--space-*`, `--radius-*`, `--shadow-sidebar-toggle`
+
+### Build
+Tentativas: 1 | Erros: 0  
+Observacao: warning de chunk > 500kB persiste (nao bloqueante).
