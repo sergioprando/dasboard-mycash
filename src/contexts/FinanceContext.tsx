@@ -71,6 +71,16 @@ type DbTransaction = {
   status: 'PENDING' | 'COMPLETED'
 }
 
+type DbGoal = {
+  id: string
+  name: string
+  category: string
+  target_amount: number | string | null
+  current_amount: number | string | null
+  due_date: string
+  member_id: string | null
+}
+
 export type FinanceContextValue = {
   transactions: Transaction[]
   goals: Goal[]
@@ -178,12 +188,13 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
 
       await ensureCurrentUser()
 
-      const [membersRes, categoriesRes, accountsRes, transactionsRes] =
+      const [membersRes, categoriesRes, accountsRes, transactionsRes, goalsRes] =
         await Promise.all([
           supabase.from('family_members').select('*').eq('user_id', user.id).order('created_at'),
           supabase.from('categories').select('*').eq('user_id', user.id),
           supabase.from('accounts').select('*').eq('user_id', user.id).order('created_at'),
           supabase.from('transactions').select('*').eq('user_id', user.id).order('date', { ascending: false }),
+          supabase.from('goals').select('*').eq('user_id', user.id).order('created_at'),
         ])
 
       const members = ((membersRes.data ?? []) as DbFamilyMember[]).map((row) => ({
@@ -251,7 +262,17 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         status: (row.status as string) === 'COMPLETED' ? 'completed' : 'pending',
       })) as Transaction[]
       setTransactions(txs)
-      setGoals([])
+
+      const loadedGoals = ((goalsRes.data ?? []) as DbGoal[]).map((row) => ({
+        id: row.id,
+        name: row.name,
+        category: row.category,
+        targetAmount: Number(row.target_amount ?? 0),
+        currentAmount: Number(row.current_amount ?? 0),
+        dueDate: row.due_date,
+        memberId: row.member_id,
+      })) as Goal[]
+      setGoals(loadedGoals)
 
       if (members.length === 0) {
         const { data: createdMember } = await supabase
@@ -366,14 +387,40 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
 
   const addGoal = useCallback((g: Goal) => {
     setGoals((prev) => [...prev, g])
-  }, [])
+    void (async () => {
+      if (!user) return
+      await supabase.from('goals').insert({
+        id: g.id,
+        user_id: user.id,
+        name: g.name,
+        category: g.category,
+        target_amount: g.targetAmount,
+        current_amount: g.currentAmount,
+        due_date: g.dueDate,
+        member_id: g.memberId,
+      })
+    })()
+  }, [user])
 
   const updateGoal = useCallback((id: string, patch: Partial<Goal>) => {
     setGoals((prev) => prev.map((x) => (x.id === id ? { ...x, ...patch } : x)))
+    void (async () => {
+      const payload: Record<string, unknown> = {}
+      if (patch.name !== undefined) payload.name = patch.name
+      if (patch.category !== undefined) payload.category = patch.category
+      if (patch.targetAmount !== undefined) payload.target_amount = patch.targetAmount
+      if (patch.currentAmount !== undefined) payload.current_amount = patch.currentAmount
+      if (patch.dueDate !== undefined) payload.due_date = patch.dueDate
+      if (patch.memberId !== undefined) payload.member_id = patch.memberId
+      if (Object.keys(payload).length > 0) {
+        await supabase.from('goals').update(payload).eq('id', id)
+      }
+    })()
   }, [])
 
   const deleteGoal = useCallback((id: string) => {
     setGoals((prev) => prev.filter((x) => x.id !== id))
+    void supabase.from('goals').delete().eq('id', id)
   }, [])
 
   const addCreditCard = useCallback((c: CreditCard) => {

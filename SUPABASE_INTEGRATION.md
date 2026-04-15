@@ -23,6 +23,7 @@ Copy `.env.example` to `.env` and fill:
 - `accounts`
 - `transactions`
 - `recurring_transactions`
+- `goals`
 
 RLS is enabled in all business tables with broad authenticated access (`USING true`, `WITH CHECK true`) as requested.
 

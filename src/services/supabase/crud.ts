@@ -41,6 +41,14 @@ export const transactionsCrud = {
   remove: (id: string) => supabase.from('transactions').delete().eq('id', id),
 }
 
+export const goalsCrud = {
+  listByUser: (userId: string) => supabase.from('goals').select('*').eq('user_id', userId),
+  create: (payload: Record<string, unknown>) => supabase.from('goals').insert(payload).select('*').single(),
+  update: (id: string, payload: Record<string, unknown>) =>
+    supabase.from('goals').update(payload).eq('id', id).select('*').single(),
+  remove: (id: string) => supabase.from('goals').delete().eq('id', id),
+}
+
 export const recurringCrud = {
   listByUser: (userId: string) =>
     supabase.from('recurring_transactions').select('*').eq('user_id', userId),
