@@ -1,6 +1,7 @@
 import { useFinance } from '../../hooks/useFinance'
 import { DashboardHeader } from './DashboardHeader'
 import { ExpensesByCategoryCarousel } from './ExpensesByCategoryCarousel'
+import { FinancialFlowChart } from './FinancialFlowChart'
 import { SummaryCards } from './SummaryCards'
 
 export function DashboardPage() {
@@ -20,6 +21,7 @@ export function DashboardPage() {
         totalExpense={expense}
         filteredTransactions={filtered}
       />
+      <FinancialFlowChart />
       <div className="rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-6">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <p className="mt-2 text-sm text-text-secondary">

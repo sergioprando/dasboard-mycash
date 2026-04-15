@@ -9,7 +9,8 @@
 - [x] PROMPT 6: Header do Dashboard (feito antes do 5)
 - [x] PROMPT 5: Cards de Resumo Financeiro
 - [x] PROMPT 7: Carrossel de Gastos por Categoria
-- [ ] PROMPT 8: Grafico de Fluxo Financeiro
+- [x] PROMPT 8: Grafico de Fluxo Financeiro
+- [ ] PROMPT 9: Widget de Cartoes de Credito
 
 ---
 
@@ -179,3 +180,29 @@ Primitivas: `--color-neutral-200`, `--space-*`, `--radius-*`, `--shadow-sidebar-
 
 ### Build
 Tentativas: 1 | Erros: 0
+
+---
+
+## PROMPT 8: Grafico de Fluxo Financeiro
+Status: ✅ | Data: 14/04/2026 | Build: ✅ (1 tentativa)
+
+### Implementado
+- Dependencia `recharts` adicionada para grafico de area responsivo.
+- Componente `FinancialFlowChart` integrado na `DashboardPage`.
+- Titulo "Fluxo financeiro" com legenda Receitas x Despesas no topo.
+- Duas areas com curva suave:
+  - Receitas: linha verde-limao + gradiente com opacidade.
+  - Despesas: linha preta + gradiente com opacidade menor.
+- Eixo X com meses abreviados, eixo Y com moeda compacta (`R$ 2k`, etc.).
+- Grid horizontal tracejada sutil e cursor vertical no hover.
+- Tooltip custom: mes, valor de receitas e despesas em BRL completo.
+- Dados mock de 7 meses preparados para futura substituicao por agregado real.
+- Tokens semanticos para chart adicionados em `index.css`.
+
+### Tokens
+Semânticas: `--color-chart-bg`, `--color-chart-grid`, `--color-chart-grid-strong`, `--color-chart-income`, `--color-chart-income-strong`, `--color-chart-expense`  
+Primitivas: `--color-accent-primary`, `--color-neutral-*`, `--color-green-600`
+
+### Build
+Tentativas: 1 | Erros: 0  
+Observacao: Vite apontou warning de chunk > 500kB (nao bloqueante).

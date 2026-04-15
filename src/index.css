@@ -64,6 +64,12 @@
   );
   --color-card-income-icon-bg: var(--color-green-100);
   --color-card-expense-icon-bg: var(--color-red-100);
+  --color-chart-bg: color-mix(in srgb, var(--color-neutral-200) 35%, var(--color-neutral-0));
+  --color-chart-grid: color-mix(in srgb, var(--color-neutral-300) 55%, transparent);
+  --color-chart-grid-strong: var(--color-neutral-400);
+  --color-chart-income: var(--color-accent-primary);
+  --color-chart-income-strong: color-mix(in srgb, var(--color-green-600) 70%, var(--color-neutral-1000));
+  --color-chart-expense: var(--color-neutral-1000);
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -124,6 +130,12 @@
   --color-card-balance-badge-bg: var(--color-card-balance-badge-bg);
   --color-card-income-icon-bg: var(--color-card-income-icon-bg);
   --color-card-expense-icon-bg: var(--color-card-expense-icon-bg);
+  --color-chart-bg: var(--color-chart-bg);
+  --color-chart-grid: var(--color-chart-grid);
+  --color-chart-grid-strong: var(--color-chart-grid-strong);
+  --color-chart-income: var(--color-chart-income);
+  --color-chart-income-strong: var(--color-chart-income-strong);
+  --color-chart-expense: var(--color-chart-expense);
   --color-overlay-scrim: var(--color-overlay-scrim);
 }
 
