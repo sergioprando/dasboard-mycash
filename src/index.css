@@ -45,6 +45,25 @@
   --color-feedback-success: var(--color-green-600);
   --color-feedback-danger: var(--color-red-600);
   --color-feedback-info: var(--color-blue-600);
+  --color-red-100: #fde9eb;
+  --color-green-100: #e8f9f2;
+
+  /* Dashboard summary cards */
+  --color-card-balance-bg: var(--color-neutral-1000);
+  --color-card-balance-fg: var(--color-neutral-0);
+  --color-card-balance-label: var(--color-neutral-400);
+  --color-card-balance-glow: color-mix(
+    in srgb,
+    var(--color-accent-primary) 65%,
+    transparent
+  );
+  --color-card-balance-badge-bg: color-mix(
+    in srgb,
+    var(--color-neutral-0) 18%,
+    transparent
+  );
+  --color-card-income-icon-bg: var(--color-green-100);
+  --color-card-expense-icon-bg: var(--color-red-100);
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -63,6 +82,7 @@
   --transition-sidebar-duration: 280ms;
   --transition-sidebar-easing: cubic-bezier(0.4, 0, 0.2, 1);
   --shadow-sidebar-toggle: 0 1px 3px rgb(0 0 0 / 0.12);
+  --sidebar-toggle-top: calc(var(--space-16) + 2px);
   --size-avatar-md: 2.5rem;
   --mobile-header-height: 3.75rem;
   --color-overlay-scrim: color-mix(
@@ -97,6 +117,13 @@
   --color-feedback-success: var(--color-feedback-success);
   --color-feedback-danger: var(--color-feedback-danger);
   --color-feedback-info: var(--color-feedback-info);
+  --color-card-balance-bg: var(--color-card-balance-bg);
+  --color-card-balance-fg: var(--color-card-balance-fg);
+  --color-card-balance-label: var(--color-card-balance-label);
+  --color-card-balance-glow: var(--color-card-balance-glow);
+  --color-card-balance-badge-bg: var(--color-card-balance-badge-bg);
+  --color-card-income-icon-bg: var(--color-card-income-icon-bg);
+  --color-card-expense-icon-bg: var(--color-card-expense-icon-bg);
   --color-overlay-scrim: var(--color-overlay-scrim);
 }
 

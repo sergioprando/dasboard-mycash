@@ -7,7 +7,8 @@
 - [x] PROMPT 3: Layout Mobile
 - [x] PROMPT 4: Context Global
 - [x] PROMPT 6: Header do Dashboard (feito antes do 5)
-- [ ] PROMPT 5: Cards de Resumo Financeiro
+- [x] PROMPT 5: Cards de Resumo Financeiro
+- [ ] PROMPT 7: Carrossel de Gastos por Categoria
 
 ---
 
@@ -132,3 +133,23 @@ Primitivas: `--color-neutral-*`, `--space-*`, `--radius-*`, `--text-*`
 
 ### Build
 Tentativas: 2 | Erros: 0 (ajuste de tipo em `toggleMember`)
+
+---
+
+## PROMPT 5: Cards de Resumo Financeiro
+Status: ✅ | Data: 14/04/2026 | Build: ✅ (1 tentativa)
+
+### Implementado
+- Ajuste de alinhamento do botão de colapsar/expandir sidebar para a altura do logo `Mycash+`.
+- `SummaryCards` com `BalanceCard`, `IncomeCard` e `ExpenseCard`.
+- Layout responsivo: mobile em coluna, desktop em linha (`lg:grid-cols-[1.15fr_1fr_1fr]`).
+- Valores vindos do contexto (`calculateTotalBalance`, `calculateIncomeForPeriod`, `calculateExpensesForPeriod`).
+- Animação de contagem (~800ms) via `useAnimatedNumber`.
+- Badge de crescimento no card de saldo usando variação dos últimos 30 dias sobre saldo estimado anterior.
+
+### Tokens
+Semânticas: `--color-card-balance-bg`, `--color-card-balance-fg`, `--color-card-balance-label`, `--color-card-balance-glow`, `--color-card-balance-badge-bg`, `--color-card-income-icon-bg`, `--color-card-expense-icon-bg`  
+Primitivas: `--color-neutral-*`, `--color-green-100`, `--color-red-100`, `--space-*`, `--radius-*`
+
+### Build
+Tentativas: 1 | Erros: 0

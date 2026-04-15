@@ -140,7 +140,8 @@ export function Sidebar() {
         aria-label={
           collapsed ? 'Expandir barra lateral' : 'Recolher barra lateral'
         }
-        className="sidebar-transition absolute right-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-border-default bg-bg-surface text-text-primary shadow-[var(--shadow-sidebar-toggle)] transition-[background-color,box-shadow] duration-200 hover:bg-[var(--color-neutral-100)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-primary)] focus-visible:ring-offset-2"
+        className="sidebar-transition absolute right-0 z-10 flex h-9 w-9 translate-x-1/2 items-center justify-center rounded-full border border-border-default bg-bg-surface text-text-primary shadow-[var(--shadow-sidebar-toggle)] transition-[background-color,box-shadow] duration-200 hover:bg-[var(--color-neutral-100)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-primary)] focus-visible:ring-offset-2"
+        style={{ top: 'var(--sidebar-toggle-top)' }}
       >
         {collapsed ? <IconChevronRight /> : <IconChevronLeft />}
       </button>

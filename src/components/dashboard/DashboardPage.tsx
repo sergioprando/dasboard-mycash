@@ -1,14 +1,23 @@
 import { useFinance } from '../../hooks/useFinance'
 import { DashboardHeader } from './DashboardHeader'
+import { SummaryCards } from './SummaryCards'
 
 export function DashboardPage() {
   const finance = useFinance()
   const filtered = finance.getFilteredTransactions()
   const balance = finance.calculateTotalBalance()
+  const income = finance.calculateIncomeForPeriod()
+  const expense = finance.calculateExpensesForPeriod()
 
   return (
     <section className="space-y-4">
       <DashboardHeader />
+      <SummaryCards
+        totalBalance={balance}
+        totalIncome={income}
+        totalExpense={expense}
+        filteredTransactions={filtered}
+      />
       <div className="rounded-[var(--radius-lg)] border border-border-default bg-bg-surface p-6">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <p className="mt-2 text-sm text-text-secondary">
