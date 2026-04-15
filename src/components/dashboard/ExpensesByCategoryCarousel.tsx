@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFinance } from '../../hooks/useFinance'
+import { IconChevronLeft, IconChevronRight } from '../layout/SidebarIcons'
 
 type CategoryRow = {
   category: string
@@ -164,19 +165,19 @@ export function ExpensesByCategoryCarousel() {
                 type="button"
                 onClick={() => scrollByAmount(-200)}
                 disabled={!canScrollLeft}
-                className="absolute left-1 top-1/2 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border-default bg-bg-surface shadow-[var(--shadow-sidebar-toggle)] disabled:opacity-40 md:flex"
+                className="absolute left-1 top-1/2 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border-default bg-bg-surface text-text-primary shadow-[var(--shadow-sidebar-toggle)] disabled:opacity-40 md:flex"
                 aria-label="Voltar categorias"
               >
-                ←
+                <IconChevronLeft />
               </button>
               <button
                 type="button"
                 onClick={() => scrollByAmount(200)}
                 disabled={!canScrollRight}
-                className="absolute right-1 top-1/2 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border-default bg-bg-surface shadow-[var(--shadow-sidebar-toggle)] disabled:opacity-40 md:flex"
+                className="absolute right-1 top-1/2 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border-default bg-bg-surface text-text-primary shadow-[var(--shadow-sidebar-toggle)] disabled:opacity-40 md:flex"
                 aria-label="Avancar categorias"
               >
-                →
+                <IconChevronRight />
               </button>
             </>
           ) : null}
