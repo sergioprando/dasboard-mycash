@@ -1,3 +1,3 @@
 # Contexts
 
-Pasta reservada para os providers globais da aplicacao, incluindo `FinanceProvider`.
+- `FinanceContext.tsx` — `FinanceProvider`, estado financeiro global e seed mock (`financeMockSeed.ts`).

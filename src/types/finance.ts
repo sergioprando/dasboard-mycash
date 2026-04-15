@@ -8,6 +8,8 @@ export interface Transaction {
   category: string
   value: number
   date: string
+  /** Vencimento para despesas pendentes (YYYY-MM-DD), opcional */
+  dueDate?: string
   memberId: string | null
   accountId: string
   installments: number

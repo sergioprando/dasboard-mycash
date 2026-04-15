@@ -5,7 +5,8 @@
 - [x] PROMPT 1: Estrutura Base
 - [x] PROMPT 2: Layout Desktop
 - [x] PROMPT 3: Layout Mobile
-- [ ] PROMPT 4: Context Global
+- [x] PROMPT 4: Context Global
+- [ ] PROMPT 5: Cards de Resumo Financeiro
 
 ---
 
@@ -79,6 +80,29 @@ Status: ✅ | Data: 14/04/2026 | Build: ✅ (1 tentativa)
 Semanticas: `--color-bg-surface`, `--color-bg-inverse`, `--color-text-inverse`, `--color-text-secondary`, `--color-border-default`, `--color-feedback-danger`, `--color-overlay-scrim`  
 Primitivas: `--color-neutral-*`, `--space-*`, `--radius-lg`, `--radius-md`, `--text-sm`, `--text-md`, `--text-lg`  
 Layout: `--mobile-header-height`, `--size-avatar-md`, `--shadow-sidebar-toggle`
+
+### Build
+Tentativas: 1 | Erros: 0
+
+---
+
+## PROMPT 4: Context Global e Gerenciamento de Estado
+Status: ✅ | Data: 14/04/2026 | Build: ✅ (1 tentativa)
+
+### Implementado
+- `FinanceProvider` em `src/contexts/FinanceContext.tsx` envolvendo rotas em `App.tsx`.
+- Estado em memoria com `useState` apenas (sem `localStorage` / `sessionStorage`).
+- Arrays: `transactions`, `goals`, `creditCards`, `bankAccounts`, `familyMembers` com CRUD basico cada.
+- Filtros globais: `selectedMemberId`, `dateRange`, `transactionType`, `searchText` + setters.
+- Funcoes derivadas: `getFilteredTransactions`, `calculateTotalBalance`, `calculateIncomeForPeriod`, `calculateExpensesForPeriod`, `calculateExpensesByCategory`, `calculateCategoryPercentage`, `calculateSavingsRate`.
+- `useFinance()` como unico acesso ao contexto.
+- Dados mock em `financeMockSeed.ts` (3 membros, 3 cartoes, 3 contas, 4 objetivos, 24 transacoes em ~4 meses).
+- Utilitarios puros: `financeFilters.ts`, `financeMetrics.ts`.
+- `Transaction` com campo opcional `dueDate` para despesas pendentes futuras.
+- `DashboardPage` le contexto (resumo simples para validacao).
+
+### Tokens
+N/A (logica apenas; UI continua com tokens existentes no dashboard).
 
 ### Build
 Tentativas: 1 | Erros: 0
