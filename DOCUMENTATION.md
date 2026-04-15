@@ -6,6 +6,7 @@
 - [x] PROMPT 2: Layout Desktop
 - [x] PROMPT 3: Layout Mobile
 - [x] PROMPT 4: Context Global
+- [x] PROMPT 6: Header do Dashboard (feito antes do 5)
 - [ ] PROMPT 5: Cards de Resumo Financeiro
 
 ---
@@ -106,3 +107,28 @@ N/A (logica apenas; UI continua com tokens existentes no dashboard).
 
 ### Build
 Tentativas: 1 | Erros: 0
+
+---
+
+## PROMPT 6: Header do Dashboard com Controles (antecipado)
+Status: ✅ | Data: 14/04/2026 | Build: ✅ (2 tentativas)
+
+### Referencia Figma
+- [Header topbar — node 42-3099](https://www.figma.com/design/6cR4IHgqeZryX55fuJPlvK/Workshop---Do-figma-MCP-ao-Cursor-AI-v.3--Community--Capgemini-Prot%C3%B3tipo?node-id=42-3099&t=OXZmdYsD7ibEEzB2-4)
+
+### Implementado
+- `DashboardHeader` integrado na `DashboardPage`.
+- Busca em tempo real ligada a `searchText` global (descrição + categoria).
+- Botão de filtros com popover no desktop e modal fullscreen no mobile.
+- Filtro de tipo (todos / receitas / despesas) atualiza contexto imediatamente.
+- Seletor de período com dois `input[type=date]` + atalhos: este mês, mês passado, últimos 3 meses, este ano.
+- Pilha de avatares de membros com toggle de seleção global (`selectedMemberId`) e indicador visual.
+- Botão `+` de membro (placeholder) e CTA `+ Nova Transação` (placeholder visual).
+- Overlay e travamento de scroll do `body` no modal mobile.
+
+### Tokens
+Semânticas: `--color-bg-surface`, `--color-bg-inverse`, `--color-text-inverse`, `--color-border-default`, `--color-overlay-scrim`  
+Primitivas: `--color-neutral-*`, `--space-*`, `--radius-*`, `--text-*`
+
+### Build
+Tentativas: 2 | Erros: 0 (ajuste de tipo em `toggleMember`)
