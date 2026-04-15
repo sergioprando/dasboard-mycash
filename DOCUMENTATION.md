@@ -8,7 +8,8 @@
 - [x] PROMPT 4: Context Global
 - [x] PROMPT 6: Header do Dashboard (feito antes do 5)
 - [x] PROMPT 5: Cards de Resumo Financeiro
-- [ ] PROMPT 7: Carrossel de Gastos por Categoria
+- [x] PROMPT 7: Carrossel de Gastos por Categoria
+- [ ] PROMPT 8: Grafico de Fluxo Financeiro
 
 ---
 
@@ -146,10 +147,35 @@ Status: ✅ | Data: 14/04/2026 | Build: ✅ (1 tentativa)
 - Valores vindos do contexto (`calculateTotalBalance`, `calculateIncomeForPeriod`, `calculateExpensesForPeriod`).
 - Animação de contagem (~800ms) via `useAnimatedNumber`.
 - Badge de crescimento no card de saldo usando variação dos últimos 30 dias sobre saldo estimado anterior.
+- Revisão: `calculateTotalBalance` passou a respeitar filtros globais ativos (via transações filtradas no contexto), atualizando o card automaticamente.
 
 ### Tokens
 Semânticas: `--color-card-balance-bg`, `--color-card-balance-fg`, `--color-card-balance-label`, `--color-card-balance-glow`, `--color-card-balance-badge-bg`, `--color-card-income-icon-bg`, `--color-card-expense-icon-bg`  
 Primitivas: `--color-neutral-*`, `--color-green-100`, `--color-red-100`, `--space-*`, `--radius-*`
+
+### Build
+Tentativas: 1 | Erros: 0
+
+---
+
+## PROMPT 7: Carrossel de Gastos por Categoria
+Status: ✅ | Data: 14/04/2026 | Build: ✅ (1 tentativa)
+
+### Implementado
+- `ExpensesByCategoryCarousel` integrado na `DashboardPage`.
+- Dados vindos de `calculateExpensesByCategory()` + percentual via `calculateCategoryPercentage()`.
+- Cards de categoria com donut (conic-gradient), percentual central, nome truncado e valor em BRL.
+- Scroll horizontal com:
+  - wheel vertical convertendo para horizontal,
+  - clique e arrasta (drag),
+  - botões de seta no desktop (`md+`) ao hover, com deslocamento ~200px.
+- Gradiente de máscara nas bordas (fade left/right).
+- Hover no card troca borda para verde-limão.
+- Mobile sem setas (somente gesto/scroll natural).
+
+### Tokens
+Semânticas: `--color-accent-primary`, `--color-bg-surface`, `--color-border-default`, `--color-text-primary`, `--color-text-secondary`  
+Primitivas: `--color-neutral-200`, `--space-*`, `--radius-*`, `--shadow-sidebar-toggle`, `--color-blue-600`, `--color-green-600`, `--color-red-600`
 
 ### Build
 Tentativas: 1 | Erros: 0

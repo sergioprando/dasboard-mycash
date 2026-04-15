@@ -1,4 +1,4 @@
-import type { BankAccount, CreditCard, Transaction } from '../types/finance'
+import type { Transaction } from '../types/finance'
 import {
   applyBaseTransactionFilters,
   applyTransactionFilters,
@@ -6,12 +6,13 @@ import {
 } from './financeFilters'
 
 export function calculateTotalBalance(
-  bankAccounts: BankAccount[],
-  creditCards: CreditCard[],
+  transactions: Transaction[],
+  filters: FinanceFilters,
 ): number {
-  const sumAccounts = bankAccounts.reduce((s, a) => s + a.balance, 0)
-  const sumBills = creditCards.reduce((s, c) => s + c.currentBill, 0)
-  return sumAccounts - sumBills
+  return applyTransactionFilters(transactions, filters).reduce(
+    (sum, t) => sum + (t.type === 'income' ? t.value : -t.value),
+    0,
+  )
 }
 
 export function calculateIncomeForPeriod(

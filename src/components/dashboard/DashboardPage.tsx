@@ -1,5 +1,6 @@
 import { useFinance } from '../../hooks/useFinance'
 import { DashboardHeader } from './DashboardHeader'
+import { ExpensesByCategoryCarousel } from './ExpensesByCategoryCarousel'
 import { SummaryCards } from './SummaryCards'
 
 export function DashboardPage() {
@@ -12,6 +13,7 @@ export function DashboardPage() {
   return (
     <section className="space-y-4">
       <DashboardHeader />
+      <ExpensesByCategoryCarousel />
       <SummaryCards
         totalBalance={balance}
         totalIncome={income}

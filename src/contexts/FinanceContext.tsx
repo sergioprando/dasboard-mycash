@@ -197,8 +197,8 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
   }, [transactions, filters])
 
   const getTotalBalance = useCallback(() => {
-    return calculateTotalBalance(bankAccounts, creditCards)
-  }, [bankAccounts, creditCards])
+    return calculateTotalBalance(transactions, filters)
+  }, [transactions, filters])
 
   const getIncomeForPeriod = useCallback(() => {
     return calculateIncomeForPeriod(transactions, filters)
