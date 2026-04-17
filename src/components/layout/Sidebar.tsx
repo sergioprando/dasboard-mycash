@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { APP_ROUTES } from '../../constants/routes'
+import { AuthContext } from '../../contexts/AuthContext'
 import { NavTooltip } from './NavTooltip'
 import {
   IconCard,
@@ -9,7 +10,6 @@ import {
   IconHome,
   IconUser,
 } from './SidebarIcons'
-import { MOCK_USER } from './layoutUserMock'
 
 /**
  * Itens principais da sidebar conforme frame Dashboard do arquivo Figma
@@ -24,6 +24,10 @@ const navItems = [
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
+  const auth = useContext(AuthContext)
+  const name = auth?.user?.user_metadata?.name ?? auth?.user?.email ?? 'Usuário'
+  const email = auth?.user?.email ?? ''
+  const avatarLetter = name.charAt(0).toUpperCase()
 
   return (
     <aside
@@ -37,7 +41,8 @@ export function Sidebar() {
         transitionTimingFunction: 'var(--transition-sidebar-easing)',
       }}
     >
-      <div className="flex min-h-0 flex-1 flex-col px-[var(--space-12)] pb-[var(--space-16)] pt-[var(--space-16)]">
+      {/* Área scrollável: logo + nav */}
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-[var(--space-12)] pt-[var(--space-16)]">
         <div
           className={`mb-[var(--space-16)] flex items-center ${collapsed ? 'justify-center' : 'justify-start'}`}
         >
@@ -56,7 +61,7 @@ export function Sidebar() {
           )}
         </div>
 
-        <nav className="flex min-h-0 flex-1 flex-col gap-[var(--space-8)] overflow-y-auto">
+        <nav className="flex flex-col gap-[var(--space-8)]">
           {navItems.map(({ label, path, Icon, end }) => (
             <NavTooltip key={path} enabled={collapsed} label={label}>
               <NavLink
@@ -102,36 +107,37 @@ export function Sidebar() {
             </NavTooltip>
           ))}
         </nav>
+      </div>
 
+      {/* Rodapé fixo: usuário sempre visível */}
+      <div
+        className={`shrink-0 border-t border-border-default px-[var(--space-12)] pb-[var(--space-16)] pt-[var(--space-16)] ${collapsed ? 'flex flex-col items-center' : ''}`}
+      >
         <div
-          className={`mt-auto border-t border-border-default pt-[var(--space-16)] ${collapsed ? 'flex flex-col items-center' : ''}`}
+          className={`flex items-center gap-[var(--space-12)] ${collapsed ? 'flex-col' : ''}`}
         >
           <div
-            className={`flex items-center gap-[var(--space-12)] ${collapsed ? 'flex-col' : ''}`}
+            className="flex shrink-0 items-center justify-center rounded-full border border-border-default bg-[var(--color-neutral-200)] text-sm font-semibold text-text-primary"
+            style={{
+              width: 'var(--size-avatar-md)',
+              height: 'var(--size-avatar-md)',
+              minWidth: 'var(--size-avatar-md)',
+              minHeight: 'var(--size-avatar-md)',
+            }}
+            aria-hidden
           >
-            <div
-              className="flex shrink-0 items-center justify-center rounded-full border border-border-default bg-[var(--color-neutral-200)] text-sm font-semibold text-text-primary"
-              style={{
-                width: 'var(--size-avatar-md)',
-                height: 'var(--size-avatar-md)',
-                minWidth: 'var(--size-avatar-md)',
-                minHeight: 'var(--size-avatar-md)',
-              }}
-              aria-hidden
-            >
-              {MOCK_USER.avatarLetter}
-            </div>
-            {!collapsed ? (
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-[length:var(--text-sm)] font-semibold text-text-primary">
-                  {MOCK_USER.name}
-                </p>
-                <p className="truncate text-[length:var(--text-xs)] text-text-secondary">
-                  {MOCK_USER.email}
-                </p>
-              </div>
-            ) : null}
+            {avatarLetter}
           </div>
+          {!collapsed ? (
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[length:var(--text-sm)] font-semibold text-text-primary">
+                {name}
+              </p>
+              <p className="truncate text-[length:var(--text-xs)] text-text-secondary">
+                {email}
+              </p>
+            </div>
+          ) : null}
         </div>
       </div>
 

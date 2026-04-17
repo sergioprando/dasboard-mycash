@@ -338,23 +338,32 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     setTransactions((prev) => [...prev, t])
     void (async () => {
       if (!user) return
-      const categoryId = await getOrCreateCategoryId(t.category, t.type)
-      await supabase.from('transactions').insert({
-        id: t.id,
-        user_id: user.id,
-        type: t.type === 'income' ? 'INCOME' : 'EXPENSE',
-        amount: t.value,
-        description: t.description,
-        date: t.date,
-        category_id: categoryId,
-        account_id: t.accountId || null,
-        member_id: t.memberId,
-        installment_number: t.currentInstallment ?? null,
-        total_installments: t.installments || 1,
-        is_recurring: t.isRecurring,
-        status: t.status === 'completed' ? 'COMPLETED' : 'PENDING',
-        notes: null,
-      })
+      try {
+        const categoryId = await getOrCreateCategoryId(t.category, t.type)
+        const { error } = await supabase.from('transactions').insert({
+          id: t.id,
+          user_id: user.id,
+          type: t.type === 'income' ? 'INCOME' : 'EXPENSE',
+          amount: t.value,
+          description: t.description,
+          date: t.date,
+          category_id: categoryId,
+          account_id: t.accountId || null,
+          member_id: t.memberId,
+          installment_number: t.currentInstallment ?? null,
+          total_installments: t.installments || 1,
+          is_recurring: t.isRecurring,
+          status: t.status === 'completed' ? 'COMPLETED' : 'PENDING',
+          notes: null,
+        })
+        if (error) {
+          console.error('[addTransaction] Supabase error:', error)
+          setTransactions((prev) => prev.filter((x) => x.id !== t.id))
+        }
+      } catch (err) {
+        console.error('[addTransaction] Unexpected error:', err)
+        setTransactions((prev) => prev.filter((x) => x.id !== t.id))
+      }
     })()
   }, [user, getOrCreateCategoryId])
 
@@ -427,21 +436,30 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     setCreditCards((prev) => [...prev, c])
     void (async () => {
       if (!user) return
-      await supabase.from('accounts').insert({
-        id: c.id,
-        user_id: user.id,
-        type: 'CREDIT_CARD',
-        name: c.name,
-        bank: c.name.split(' ')[0] ?? c.name,
-        last_digits: c.lastDigits ?? null,
-        holder_id: c.holderId,
-        balance: 0,
-        credit_limit: c.limit,
-        current_bill: c.currentBill,
-        due_day: c.dueDay,
-        closing_day: c.closingDay,
-        theme: c.theme,
-      })
+      try {
+        const { error } = await supabase.from('accounts').insert({
+          id: c.id,
+          user_id: user.id,
+          type: 'CREDIT_CARD',
+          name: c.name,
+          bank: c.name,
+          last_digits: c.lastDigits ?? null,
+          holder_id: c.holderId,
+          balance: 0,
+          credit_limit: c.limit,
+          current_bill: c.currentBill,
+          due_day: c.dueDay,
+          closing_day: c.closingDay,
+          theme: c.theme,
+        })
+        if (error) {
+          console.error('[addCreditCard] Supabase error:', error)
+          setCreditCards((prev) => prev.filter((x) => x.id !== c.id))
+        }
+      } catch (err) {
+        console.error('[addCreditCard] Unexpected error:', err)
+        setCreditCards((prev) => prev.filter((x) => x.id !== c.id))
+      }
     })()
   }, [user])
 
@@ -474,21 +492,29 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     setBankAccounts((prev) => [...prev, a])
     void (async () => {
       if (!user) return
-      await supabase.from('accounts').insert({
-        id: a.id,
-        user_id: user.id,
-        type:
-          a.type === 'savings'
-            ? 'SAVINGS'
-            : a.type === 'checking'
-              ? 'CHECKING'
-              : 'CHECKING',
-        name: a.name,
-        bank: a.name.split(' ')[0] ?? a.name,
-        holder_id: a.holderId,
-        balance: a.balance,
-        current_bill: 0,
-      })
+      try {
+        const { error } = await supabase.from('accounts').insert({
+          id: a.id,
+          user_id: user.id,
+          type:
+            a.type === 'savings'
+              ? 'SAVINGS'
+              : a.type === 'checking'
+                ? 'CHECKING'
+                : 'CHECKING',
+          name: a.name,
+          holder_id: a.holderId,
+          balance: a.balance,
+          current_bill: 0,
+        })
+        if (error) {
+          console.error('[addBankAccount] Supabase error:', error)
+          setBankAccounts((prev) => prev.filter((x) => x.id !== a.id))
+        }
+      } catch (err) {
+        console.error('[addBankAccount] Unexpected error:', err)
+        setBankAccounts((prev) => prev.filter((x) => x.id !== a.id))
+      }
     })()
   }, [user])
 

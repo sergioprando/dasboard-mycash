@@ -20,7 +20,7 @@ export function AddMemberModal({ onClose }: AddMemberModalProps) {
     if (!name.trim() || !role.trim() || !Number.isFinite(income)) return
 
     const newMember: FamilyMember = {
-      id: `mem-${Date.now()}`,
+      id: crypto.randomUUID(),
       name: name.trim(),
       role: role.trim(),
       email: email.trim() || undefined,
@@ -35,36 +35,51 @@ export function AddMemberModal({ onClose }: AddMemberModalProps) {
   return (
     <ModalShell title="Adicionar membro" onClose={onClose}>
       <form onSubmit={onSubmit} className="space-y-3">
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Nome do membro"
-          className="w-full rounded-md border border-border-default px-3 py-2 text-sm"
-          required
-        />
-        <input
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          placeholder="Perfil (ex.: Cônjuge, Filho)"
-          className="w-full rounded-md border border-border-default px-3 py-2 text-sm"
-          required
-        />
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email (opcional)"
-          type="email"
-          className="w-full rounded-md border border-border-default px-3 py-2 text-sm"
-        />
-        <input
-          value={monthlyIncome}
-          onChange={(e) => setMonthlyIncome(e.target.value)}
-          placeholder="Renda mensal"
-          type="number"
-          min="0"
-          step="0.01"
-          className="w-full rounded-md border border-border-default px-3 py-2 text-sm"
-        />
+        <label className="block space-y-1.5">
+          <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Nome</span>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Ex: Maria Silva"
+            className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+            required
+          />
+        </label>
+
+        <label className="block space-y-1.5">
+          <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Perfil</span>
+          <input
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            placeholder="Ex: Cônjuge, Filho"
+            className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+            required
+          />
+        </label>
+
+        <label className="block space-y-1.5">
+          <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Email <span className="font-normal text-text-secondary">(opcional)</span></span>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Ex: maria@email.com"
+            type="email"
+            className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+          />
+        </label>
+
+        <label className="block space-y-1.5">
+          <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Renda mensal</span>
+          <input
+            value={monthlyIncome}
+            onChange={(e) => setMonthlyIncome(e.target.value)}
+            placeholder="0,00"
+            type="number"
+            min="0"
+            step="0.01"
+            className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+          />
+        </label>
 
         <button
           type="submit"

@@ -64,7 +64,7 @@ export function NewTransactionModal({ onClose }: NewTransactionModalProps) {
     }
 
     const tx: Transaction = {
-      id: `tx-${Date.now()}`,
+      id: crypto.randomUUID(),
       type,
       description: description.trim(),
       category: category.trim(),

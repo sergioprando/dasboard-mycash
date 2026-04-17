@@ -27,7 +27,7 @@ export function AddCreditCardModal({ onClose }: AddCreditCardModalProps) {
     if (!name.trim() || !holderId || !Number.isFinite(parsedLimit)) return
 
     const card: CreditCard = {
-      id: `card-${Date.now()}`,
+      id: crypto.randomUUID(),
       name: name.trim(),
       holderId,
       limit: parsedLimit,
@@ -45,70 +45,94 @@ export function AddCreditCardModal({ onClose }: AddCreditCardModalProps) {
   return (
     <ModalShell title="Adicionar cartão" onClose={onClose}>
       <form onSubmit={onSubmit} className="space-y-3">
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Nome do cartão"
-          className="w-full rounded-md border border-border-default px-3 py-2 text-sm"
-          required
-        />
-        <select
-          value={holderId}
-          onChange={(e) => setHolderId(e.target.value)}
-          className="w-full rounded-md border border-border-default px-3 py-2 text-sm"
-          required
-        >
-          {familyMembers.map((member) => (
-            <option key={member.id} value={member.id}>
-              {member.name}
-            </option>
-          ))}
-        </select>
-        <div className="grid grid-cols-2 gap-3">
+        <label className="block space-y-1.5">
+          <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Nome do cartão</span>
           <input
-            value={limit}
-            onChange={(e) => setLimit(e.target.value)}
-            placeholder="Limite"
-            type="number"
-            min="0"
-            step="0.01"
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Ex: Nubank Gold"
+            className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
             required
           />
-          <input
-            value={currentBill}
-            onChange={(e) => setCurrentBill(e.target.value)}
-            placeholder="Fatura atual"
-            type="number"
-            min="0"
-            step="0.01"
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
-          />
-          <input
-            value={closingDay}
-            onChange={(e) => setClosingDay(e.target.value)}
-            placeholder="Fechamento"
-            type="number"
-            min="1"
-            max="31"
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
-          />
-          <input
-            value={dueDay}
-            onChange={(e) => setDueDay(e.target.value)}
-            placeholder="Vencimento"
-            type="number"
-            min="1"
-            max="31"
-            className="rounded-md border border-border-default px-3 py-2 text-sm"
-          />
+        </label>
+
+        <label className="block space-y-1.5">
+          <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Titular</span>
+          <select
+            value={holderId}
+            onChange={(e) => setHolderId(e.target.value)}
+            className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+            required
+          >
+            {familyMembers.map((member) => (
+              <option key={member.id} value={member.id}>
+                {member.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <div className="grid grid-cols-2 gap-3">
+          <label className="block space-y-1.5">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Limite</span>
+            <input
+              value={limit}
+              onChange={(e) => setLimit(e.target.value)}
+              placeholder="0,00"
+              type="number"
+              min="0"
+              step="0.01"
+              className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+              required
+            />
+          </label>
+          <label className="block space-y-1.5">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Fatura atual</span>
+            <input
+              value={currentBill}
+              onChange={(e) => setCurrentBill(e.target.value)}
+              placeholder="0,00"
+              type="number"
+              min="0"
+              step="0.01"
+              className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+            />
+          </label>
+          <label className="block space-y-1.5">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Dia de fechamento</span>
+            <input
+              value={closingDay}
+              onChange={(e) => setClosingDay(e.target.value)}
+              placeholder="Ex: 8"
+              type="number"
+              min="1"
+              max="31"
+              className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+            />
+          </label>
+          <label className="block space-y-1.5">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Dia de vencimento</span>
+            <input
+              value={dueDay}
+              onChange={(e) => setDueDay(e.target.value)}
+              placeholder="Ex: 15"
+              type="number"
+              min="1"
+              max="31"
+              className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+            />
+          </label>
         </div>
-        <input
-          value={lastDigits}
-          onChange={(e) => setLastDigits(e.target.value)}
-          placeholder="Últimos 4 dígitos (opcional)"
-          className="w-full rounded-md border border-border-default px-3 py-2 text-sm"
-        />
+
+        <label className="block space-y-1.5">
+          <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Últimos 4 dígitos <span className="font-normal text-text-secondary">(opcional)</span></span>
+          <input
+            value={lastDigits}
+            onChange={(e) => setLastDigits(e.target.value)}
+            placeholder="Ex: 1234"
+            className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+          />
+        </label>
         <div className="flex gap-2">
           {(['black', 'lime', 'white'] as const).map((item) => (
             <button
