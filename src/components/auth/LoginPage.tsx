@@ -45,31 +45,40 @@ export function LoginPage() {
 
         <form onSubmit={onSubmit} className="mt-5 space-y-3">
           {mode === 'signup' ? (
+            <label className="block space-y-1.5">
+              <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Nome</span>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Ex: Maria Silva"
+                className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+                required
+              />
+            </label>
+          ) : null}
+          <label className="block space-y-1.5">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">E-mail</span>
             <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Nome"
-              className="h-11 w-full rounded-md border border-border-default px-3 text-sm"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              placeholder="Ex: voce@email.com"
+              className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
               required
             />
-          ) : null}
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            placeholder="E-mail"
-            className="h-11 w-full rounded-md border border-border-default px-3 text-sm"
-            required
-          />
-          <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            placeholder="Senha"
-            className="h-11 w-full rounded-md border border-border-default px-3 text-sm"
-            required
-            minLength={6}
-          />
+          </label>
+          <label className="block space-y-1.5">
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Senha</span>
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              placeholder="Mínimo 6 caracteres"
+              className="h-12 w-full rounded-[var(--radius-md)] border border-border-default bg-bg-surface px-3 text-sm"
+              required
+              minLength={6}
+            />
+          </label>
           <button
             type="submit"
             disabled={submitting}
