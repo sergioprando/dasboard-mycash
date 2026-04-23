@@ -9,6 +9,7 @@ type AuthContextValue = {
   loading: boolean
   signIn: (email: string, password: string) => Promise<string | null>
   signUp: (name: string, email: string, password: string) => Promise<string | null>
+  signInWithGoogle: () => Promise<string | null>
   signOut: () => Promise<void>
 }
 
@@ -57,6 +58,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             data: {
               name,
             },
+          },
+        })
+        return error?.message ?? null
+      },
+      signInWithGoogle: async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: window.location.origin,
           },
         })
         return error?.message ?? null
