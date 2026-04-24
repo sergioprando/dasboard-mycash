@@ -69,26 +69,7 @@ export function LoginPage() {
             />
           </label>
           <label className="block space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Senha</span>
-              {mode === 'login' ? (
-                <button
-                  type="button"
-                  onClick={async () => {
-                    if (!email) { setMessage('Digite seu e-mail primeiro.'); return }
-                    setSubmitting(true)
-                    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                      redirectTo: window.location.origin,
-                    })
-                    setMessage(error ? error.message : 'E-mail de recuperação enviado! Verifique sua caixa de entrada.')
-                    setSubmitting(false)
-                  }}
-                  className="text-xs font-semibold text-text-secondary underline hover:text-text-primary"
-                >
-                  Esqueci minha senha
-                </button>
-              ) : null}
-            </div>
+            <span className="text-sm font-semibold tracking-[0.3px] text-text-primary">Senha</span>
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -99,6 +80,23 @@ export function LoginPage() {
               minLength={6}
             />
           </label>
+          {mode === 'login' ? (
+            <button
+              type="button"
+              onClick={async () => {
+                if (!email) { setMessage('Digite seu e-mail primeiro.'); return }
+                setSubmitting(true)
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                  redirectTo: window.location.origin,
+                })
+                setMessage(error ? error.message : 'E-mail de recuperação enviado! Verifique sua caixa de entrada.')
+                setSubmitting(false)
+              }}
+              className="text-left text-sm font-semibold text-text-primary underline"
+            >
+              Esqueci minha senha
+            </button>
+          ) : null}
           <button
             type="submit"
             disabled={submitting}
@@ -114,7 +112,7 @@ export function LoginPage() {
               setMode((prev) => (prev === 'login' ? 'signup' : 'login'))
               setMessage(null)
             }}
-            className="w-full text-center text-sm font-semibold text-text-primary underline"
+            className="text-left text-sm font-semibold text-text-primary underline"
           >
             {mode === 'login' ? 'Não tenho conta' : 'Já tenho conta'}
           </button>
