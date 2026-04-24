@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { APP_ROUTES } from '../../constants/routes'
 import { AuthContext } from '../../contexts/AuthContext'
 import { NavTooltip } from './NavTooltip'
@@ -8,6 +8,7 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconHome,
+  IconLogOut,
   IconUser,
 } from './SidebarIcons'
 
@@ -24,10 +25,24 @@ const navItems = [
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
   const auth = useContext(AuthContext)
+  const navigate = useNavigate()
   const name = auth?.user?.user_metadata?.name ?? auth?.user?.email ?? 'Usuário'
   const email = auth?.user?.email ?? ''
   const avatarLetter = name.charAt(0).toUpperCase()
+
+  // Fecha o dropdown ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
     <aside
@@ -110,11 +125,36 @@ export function Sidebar() {
       </div>
 
       {/* Rodapé fixo: usuário sempre visível */}
-      <div
-        className={`shrink-0 border-t border-border-default px-[var(--space-12)] pb-[var(--space-16)] pt-[var(--space-16)] ${collapsed ? 'flex flex-col items-center' : ''}`}
-      >
-        <div
-          className={`flex items-center gap-[var(--space-12)] ${collapsed ? 'flex-col' : ''}`}
+      <div ref={menuRef} className="relative shrink-0 border-t border-border-default">
+
+        {/* Dropdown — abre para cima */}
+        {menuOpen && (
+          <div className="absolute bottom-full left-[var(--space-12)] right-[var(--space-12)] mb-2 overflow-hidden rounded-[var(--radius-md)] border border-border-default bg-bg-surface shadow-[var(--shadow-sidebar-toggle)]">
+            <button
+              type="button"
+              onClick={() => { setMenuOpen(false); navigate(APP_ROUTES.profile) }}
+              className="flex w-full items-center gap-[var(--space-8)] px-[var(--space-12)] py-[var(--space-10)] text-[length:var(--text-sm)] font-semibold text-text-primary transition-colors hover:bg-[var(--color-neutral-100)]"
+            >
+              <IconUser />
+              Editar Perfil
+            </button>
+            <div className="mx-[var(--space-12)] h-px bg-border-default" />
+            <button
+              type="button"
+              onClick={async () => { setMenuOpen(false); await auth?.signOut() }}
+              className="flex w-full items-center gap-[var(--space-8)] px-[var(--space-12)] py-[var(--space-10)] text-[length:var(--text-sm)] font-semibold text-red-500 transition-colors hover:bg-red-50"
+            >
+              <IconLogOut />
+              Sair
+            </button>
+          </div>
+        )}
+
+        {/* Área clicável do usuário */}
+        <button
+          type="button"
+          onClick={() => setMenuOpen((o) => !o)}
+          className={`flex w-full items-center gap-[var(--space-12)] px-[var(--space-12)] pb-[var(--space-16)] pt-[var(--space-16)] transition-colors hover:bg-[var(--color-neutral-100)] ${collapsed ? 'flex-col' : ''}`}
         >
           <div
             className="flex shrink-0 items-center justify-center rounded-full border border-border-default bg-[var(--color-neutral-200)] text-sm font-semibold text-text-primary"
@@ -129,7 +169,7 @@ export function Sidebar() {
             {avatarLetter}
           </div>
           {!collapsed ? (
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 flex-1 text-left">
               <p className="truncate text-[length:var(--text-sm)] font-semibold text-text-primary">
                 {name}
               </p>
@@ -138,7 +178,7 @@ export function Sidebar() {
               </p>
             </div>
           ) : null}
-        </div>
+        </button>
       </div>
 
       <button
