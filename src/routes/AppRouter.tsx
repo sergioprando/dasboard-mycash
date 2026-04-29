@@ -8,11 +8,14 @@ import { CardsPage } from '../components/cards/CardsPage'
 import { TransactionsPage } from '../components/transactions/TransactionsPage'
 import { ProfilePage } from '../components/profile/ProfilePage'
 import { GoalsPage } from '../components/goals/GoalsPage'
+import { DesignSystemPage } from '../components/design-system/DesignSystemPage'
 
 export function AppRouter() {
   return (
     <Routes>
       <Route path={APP_ROUTES.login} element={<LoginPage />} />
+      {/* Página pública — não requer autenticação */}
+      <Route path={APP_ROUTES.designSystem} element={<DesignSystemPage />} />
       <Route
         element={
           <RequireAuth>
