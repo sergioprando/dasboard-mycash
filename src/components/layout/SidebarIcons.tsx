@@ -186,6 +186,25 @@ export function IconLogOut({ className }: IconProps) {
   )
 }
 
+export function IconDesignSystem({ className }: IconProps) {
+  return (
+    <svg
+      className={className}
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <rect x="2" y="2" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.75" />
+      <rect x="14" y="2" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.75" />
+      <rect x="2" y="14" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.75" />
+      <circle cx="18" cy="18" r="4" stroke="currentColor" strokeWidth="1.75" />
+    </svg>
+  )
+}
+
 export function IconClose({ className }: IconProps) {
   return (
     <svg

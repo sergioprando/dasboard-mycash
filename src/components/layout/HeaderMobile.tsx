@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { ThemeSwitch } from './ThemeSwitch'
 import { IconClose } from './SidebarIcons'
 import { MOCK_USER } from './layoutUserMock'
 import { mobileNavItems } from './mobileNavItems'
@@ -50,21 +51,24 @@ export function HeaderMobile() {
           <span className="text-[length:var(--text-lg)] font-bold tracking-tight text-text-primary">
             Mycash+
           </span>
-          <button
-            type="button"
-            onClick={() => setMenuOpen(true)}
-            aria-expanded={menuOpen}
-            aria-haspopup="dialog"
-            aria-controls="mobile-menu-dropdown"
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-border-default bg-[var(--color-neutral-200)] text-sm font-semibold text-text-primary outline-none transition hover:bg-[var(--color-neutral-300)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent-primary)] focus-visible:ring-offset-2"
-            style={{
-              width: 'var(--size-avatar-md)',
-              height: 'var(--size-avatar-md)',
-            }}
-          >
-            <span className="sr-only">Abrir menu</span>
-            <span aria-hidden>{MOCK_USER.avatarLetter}</span>
-          </button>
+          <div className="ml-auto flex items-center gap-2">
+            <ThemeSwitch compact />
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              aria-expanded={menuOpen}
+              aria-haspopup="dialog"
+              aria-controls="mobile-menu-dropdown"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-border-default bg-[var(--color-neutral-200)] text-sm font-semibold text-text-primary outline-none transition hover:bg-[var(--color-neutral-300)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent-primary)] focus-visible:ring-offset-2"
+              style={{
+                width: 'var(--size-avatar-md)',
+                height: 'var(--size-avatar-md)',
+              }}
+            >
+              <span className="sr-only">Abrir menu</span>
+              <span aria-hidden>{MOCK_USER.avatarLetter}</span>
+            </button>
+          </div>
         </div>
       </header>
 

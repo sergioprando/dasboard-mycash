@@ -3,10 +3,12 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { APP_ROUTES } from '../../constants/routes'
 import { AuthContext } from '../../contexts/AuthContext'
 import { NavTooltip } from './NavTooltip'
+import { ThemeSwitch } from './ThemeSwitch'
 import {
   IconCard,
   IconChevronLeft,
   IconChevronRight,
+  IconDesignSystem,
   IconHome,
   IconLogOut,
   IconUser,
@@ -21,6 +23,7 @@ const navItems = [
   { label: 'Home', path: APP_ROUTES.dashboard, Icon: IconHome, end: true },
   { label: 'Cartões', path: APP_ROUTES.cards, Icon: IconCard },
   { label: 'Perfil', path: APP_ROUTES.profile, Icon: IconUser },
+  { label: 'Design System', path: APP_ROUTES.designSystem, Icon: IconDesignSystem },
 ]
 
 export function Sidebar() {
@@ -122,6 +125,11 @@ export function Sidebar() {
             </NavTooltip>
           ))}
         </nav>
+      </div>
+
+      {/* Theme toggle */}
+      <div className={`shrink-0 px-[var(--space-12)] pb-[var(--space-8)] ${collapsed ? 'flex justify-center' : ''}`}>
+        <ThemeSwitch compact={collapsed} />
       </div>
 
       {/* Rodapé fixo: usuário sempre visível */}
